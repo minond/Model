@@ -49,15 +49,17 @@ trait SessionStorage
      */
     public static function init()
     {
+        $key = '__models__';
+
         if (!session_id()) {
             session_start();
         }
 
-        if (!isset($_SESSION['__models'])) {
-            $_SESSION['__models'] = [];
+        if (!isset($_SESSION[ $key ])) {
+            $_SESSION[ $key ] = [];
         }
 
-        static::$sess = & $_SESSION['__models'];
+        static::$sess = & $_SESSION[ $key ];
     }
 
     /**
@@ -67,14 +69,11 @@ trait SessionStorage
      */
     public static function find($id)
     {
+        $hash = static::hash($id);
         static::init();
 
-        if (isset(
-            static::$sess,
-            static::$sess[ static::hash($id) ]
-        )) {
-            return unserialize(static::$sess[ static::hash($id) ]);
-        }
+        return isset(static::$sess[ $hash ]) ?
+            unserialize(static::$sess[ $hash ]) : null;
     }
 
     /**
