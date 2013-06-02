@@ -247,16 +247,16 @@ class Model
      * @param string $storage
      * @throws \Exception
      */
-    final public static function saveto($storage)
+    final public static function saveto($storage, $tname = 'Storage')
     {
         $ns = __NAMESPACE__;
 
-        if (trait_exists("{$ns}\Storage")) {
-            throw new \Exception('Storage has already been defined');
+        if (trait_exists("{$ns}\{$tname}")) {
+            throw new \Exception("{$ns}\{$tname} has already been defined");
         } else if (!trait_exists($storage)) {
             throw new \Exception("Invalid storage trait: {$storage}");
         }
 
-        eval("namespace {$ns}; trait Storage { use {$storage}; }");
+        eval("namespace {$ns}\storage\model; trait {$tname} { use {$storage}; }");
     }
 }

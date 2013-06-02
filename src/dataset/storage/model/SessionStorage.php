@@ -53,6 +53,10 @@ trait SessionStorage
             session_start();
         }
 
+        if (!isset($_SESSION['__models'])) {
+            $_SESSION['__models'] = [];
+        }
+
         static::$sess = & $_SESSION['__models'];
     }
 
@@ -81,6 +85,7 @@ trait SessionStorage
     public static function findBy(array $criteria)
     {
         $matches = [];
+        static::init();
 
         foreach (static::$sess as $hash => & $ser) {
             $model = unserialize($ser);
