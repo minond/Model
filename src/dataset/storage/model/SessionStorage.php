@@ -107,4 +107,33 @@ trait SessionStorage
 
         return $matches;
     }
+
+    /**
+     * find a model using a set of criteria
+     * @param array $criteria
+     * @return Model
+     */
+    public static function findOneBy(array $criteria)
+    {
+        static::init();
+
+        foreach (static::$sess as $hash => & $ser) {
+            $model = unserialize($ser);
+            $match = true;
+
+            foreach ($criteria as $field => $value) {
+                if ($model->{ $field } !== $value) {
+                    $match = false;
+                    break;
+                }
+            }
+
+            if ($match) {
+                return $model;
+            }
+
+            unset($model);
+            unset($ser);
+        }
+    }
 }

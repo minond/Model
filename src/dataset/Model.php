@@ -8,10 +8,18 @@ namespace dataset;
 class Model
 {
     /**
-     * property getter/setter flags
+     * property getter/setter/add/remove flags
      */
     const P_GET = 'get';
     const P_SET = 'set';
+    const P_ADD = 'add';
+    const P_REMOVE = 'remove';
+
+    /**
+     * custom find functions
+     */
+    const F_FINDBY = 'findBy';
+    const F_FINDONEBY = 'findOneBy';
 
     /**
      * model's unique identifier
@@ -32,8 +40,8 @@ class Model
         $ret = null;
 
         if (self::isLikePropertyGetSet($method)) {
-            $prop = self::parsePropertyNameFromMethod($method);
             $type = self::parsePropertyActionFromMethod($method);
+            $prop = self::parsePropertyNameFromMethod($method, $type);
 
             if (property_exists($this, $prop)) {
                 switch ($type) {
@@ -47,6 +55,34 @@ class Model
                         $ret = $this->{ $prop };
                         $error = false;
                         break;
+
+                    case self::P_ADD:
+                        if (is_array($this->{ $prop })) {
+                            array_push($this->{ $prop }, $args[0]);
+                            $ret = count($this->{ $prop });
+                            $error = false;
+                        }
+                        break;
+
+                    case self::P_REMOVE:
+                        if (is_array($this->{ $prop })) {
+                            $copy = [];
+                            $vrem = $args[0];
+
+                            foreach ($this->{ $prop } as $index => & $value) {
+                                if ($value !== $vrem) {
+                                    $copy[] = $value;
+                                }
+
+                                unset($value);
+                            }
+
+                            $this->{ $prop } = $copy;
+                            $ret = count($this->{ $prop });
+                            $error = false;
+                            unset($copy);
+                        }
+                        break;
                 }
             }
         }
@@ -58,6 +94,49 @@ class Model
         }
 
         return $ret;
+    }
+
+    /**
+     * findByFirstName = findBy([ 'first_name' => ? ])
+     * @param string $method
+     * @param array $args
+     * @throw Exception
+     * @return Model|Model[]
+     */
+    final public static function __callStatic($method, $args)
+    {
+        $error = true;
+        $matches = [];
+        $filter = [];
+
+        if (self::isLikeFindByCall($method)) {
+            $type = self::parsePropertyActionFromMethod($method);
+            $prop = self::parsePropertyNameFromMethod($method);
+
+            if (property_exists(get_called_class(), $prop)) {
+                $filter[ $prop ] = $args[0];
+
+                switch ($type) {
+                    case self::F_FINDBY:
+                        $error = false;
+                        $matches = static::findBy($filter);
+                        break;
+
+                    case self::F_FINDONEBY:
+                        $error = false;
+                        $matches = static::findOneBy($filter);
+                        break;
+                }
+            }
+        }
+
+        if ($error) {
+            throw new \Exception(sprintf(
+                'Invalid static method %s called on class %s',
+                $method, get_called_class()));
+        }
+
+        return $matches;
     }
 
     /**
@@ -158,6 +237,17 @@ class Model
     }
 
     /**
+     * find a model using a set of criteria
+     * @param array $criteria
+     * @return Model[]
+     */
+    public static function findOneBy(array $criteria)
+    {
+        throw new \Exception(sprintf('Cannot call undefined method %s::%s',
+            get_called_class(), __FUNCTION__));
+    }
+
+    /**
      * @param array $data
      * @return Model
      */
@@ -191,7 +281,20 @@ class Model
     {
         $method = strtolower($method);
         return strpos($method, self::P_GET) === 0 ||
-            strpos($method, self::P_SET) === 0;
+            strpos($method, self::P_SET) === 0 ||
+            strpos($method, self::P_ADD) === 0 ||
+            strpos($method, self::P_REMOVE) === 0;
+    }
+
+    /**
+     * @param string $method
+     * @return boolean
+     */
+    final protected static function isLikeFindByCall($method)
+    {
+        $method = strtolower($method);
+        return strpos($method, strtolower(self::F_FINDBY)) === 0 ||
+            strpos($method, strtolower(self::F_FINDONEBY)) === 0;
     }
 
     /**
@@ -206,6 +309,14 @@ class Model
             $type = self::P_SET;
         } else if (strpos($method, self::P_GET) === 0) {
             $type = self::P_GET;
+        } else if (strpos($method, self::P_ADD) === 0) {
+            $type = self::P_ADD;
+        } else if (strpos($method, self::P_REMOVE) === 0) {
+            $type = self::P_REMOVE;
+        } else if (strpos($method, self::F_FINDBY) === 0) {
+            $type = self::F_FINDBY;
+        } else if (strpos($method, self::F_FINDONEBY) === 0) {
+            $type = self::F_FINDONEBY;
         }
 
         return $type;
@@ -233,13 +344,28 @@ class Model
 
     /**
      * @param string $method
+     * @param string $type, default = null
      * @return boolean
      */
-    final protected static function parsePropertyNameFromMethod($method)
+    final protected static function parsePropertyNameFromMethod($method, $type = null)
     {
-        return strtolower(preg_replace(
-            ['/^get|^set/', '/(\w)([A-Z])/'],
+        $prop = strtolower(preg_replace(
+            ['/^get|^set|^add|^remove|^findBy|^findOneBy/', '/(\w)([A-Z])/'],
             ['', '$1_$2'], $method));
+
+        switch ($type) {
+            // addRole => $roles[]
+            case self::P_ADD:
+            case self::P_REMOVE:
+                $prop .= 's';
+                break;
+
+            // setName = $name
+            default:
+                break;
+        }
+
+        return $prop;
     }
 
     /**
