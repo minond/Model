@@ -195,6 +195,7 @@ class Model
 
     /**
      * saves a model. returns save success
+     * @codeCoverageIgnore
      * @throws Exception
      * @return boolean
      */
@@ -206,6 +207,7 @@ class Model
 
     /**
      * deletes a model. returns delete success
+     * @codeCoverageIgnore
      * @return boolean
      */
     public function delete()
@@ -216,6 +218,7 @@ class Model
 
     /**
      * find a model using a unique identifier
+     * @codeCoverageIgnore
      * @param mixed $id
      * @return Model
      */
@@ -227,6 +230,7 @@ class Model
 
     /**
      * find models using a set of criteria
+     * @codeCoverageIgnore
      * @param array $criteria
      * @return Model[]
      */
@@ -238,6 +242,7 @@ class Model
 
     /**
      * find a model using a set of criteria
+     * @codeCoverageIgnore
      * @param array $criteria
      * @return Model[]
      */
@@ -277,7 +282,7 @@ class Model
      * @param string $method
      * @return boolean
      */
-    final protected static function isLikePropertyGetSet($method)
+    final public static function isLikePropertyGetSet($method)
     {
         $method = strtolower($method);
         return strpos($method, self::P_GET) === 0 ||
@@ -290,7 +295,7 @@ class Model
      * @param string $method
      * @return boolean
      */
-    final protected static function isLikeFindByCall($method)
+    final public static function isLikeFindByCall($method)
     {
         $method = strtolower($method);
         return strpos($method, strtolower(self::F_FINDBY)) === 0 ||
@@ -301,7 +306,7 @@ class Model
      * @param string $method
      * @return boolean
      */
-    final protected static function parsePropertyActionFromMethod($method)
+    final public static function parsePropertyActionFromMethod($method)
     {
         $type = null;
 
@@ -327,7 +332,7 @@ class Model
      * @param string $prop
      * @return string
      */
-    final protected static function generateSetterMethodName($prop)
+    final public static function generateSetterMethodName($prop)
     {
         return self::P_SET . str_replace('_', '', $prop);
     }
@@ -337,7 +342,7 @@ class Model
      * @param string $prop
      * @return string
      */
-    final protected static function generateGetterMethodName($prop)
+    final public static function generateGetterMethodName($prop)
     {
         return self::P_GET . str_replace('_', '', $prop);
     }
@@ -347,7 +352,7 @@ class Model
      * @param string $type, default = null
      * @return boolean
      */
-    final protected static function parsePropertyNameFromMethod($method, $type = null)
+    final public static function parsePropertyNameFromMethod($method, $type = null)
     {
         $prop = strtolower(preg_replace(
             ['/^get|^set|^add|^remove|^findBy|^findOneBy/', '/(\w)([A-Z])/'],

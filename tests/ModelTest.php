@@ -1,5 +1,7 @@
 <?php
 
+use dataset\Model;
+
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'models.php';
 
 class ModelTest extends PHPUnit_Framework_TestCase
@@ -12,6 +14,46 @@ class ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($val, $model->first_name);
     }
 
+    public function testSettingAndGettingFunctions()
+    {
+        $val = 'Marcos';
+        $model = new UserProps;
+        $model->setFirstName($val);
+        $this->assertEquals($val, $model->getFirstName());
+    }
+
+    public function testAddingToAnArray()
+    {
+        $model = new UserProps;
+        $model->addColor('red');
+        $model->addColor('blue');
+        $this->assertEquals(['red', 'blue'], $model->colors);
+    }
+
+    public function testRemovingFromAnArray()
+    {
+        $model = new UserProps;
+        $model->addColor('red');
+        $model->addColor('blue');
+        $this->assertEquals(['red', 'blue'], $model->colors);
+        $model->removeColor('blue');
+        $this->assertEquals(['red'], $model->colors);
+        $model->removeColor('blue');
+        $this->assertEquals(['red'], $model->colors);
+        $model->removeColor('red');
+        $this->assertEquals([], $model->colors);
+    }
+
+    public function testSettingAndGettingPropertiesUsingProperties()
+    {
+        $val = 'Marcos';
+        $model = new UserFuncs;
+        $model->first_name = $val;
+        $this->assertEquals($val, $model->first_name);
+        $this->assertTrue($model->get);
+        $this->assertTrue($model->set);
+    }
+
     public function testSettingAndGettingPropertiesUsingFunctions()
     {
         $val = 'Marcos';
@@ -20,5 +62,125 @@ class ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($val, $model->getFirstName());
         $this->assertTrue($model->get);
         $this->assertTrue($model->set);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testSettingInvalidPropertiesTriggersError()
+    {
+        $model = new UserFuncs;
+        $model->invalid_property = 1;
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testGettingInvalidPropertiesTriggersError()
+    {
+        $model = new UserFuncs;
+        $a = $model->invalid_property;
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testCallingInvalidSetterTriggersError()
+    {
+        $model = new UserFuncs;
+        $model->setSetSetSet(true);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testCallingInvalidGetterTriggersError()
+    {
+        $model = new UserFuncs;
+        $model->getGetGetGet(true);
+    }
+
+    public function testSetterMethodGenerator()
+    {
+        $this->assertEquals('setfirstname', Model::generateSetterMethodName('first_name'));
+    }
+
+    public function testGetterMethodGenerator()
+    {
+        $this->assertEquals('getfirstname', Model::generateGetterMethodName('first_name'));
+    }
+
+    public function testMethodToPropertyParserForRegularProperties()
+    {
+        $this->assertEquals('first_name', Model::parsePropertyNameFromMethod('getFirstName'));
+        $this->assertEquals('first_name', Model::parsePropertyNameFromMethod('setFirstName'));
+        $this->assertEquals('first_name', Model::parsePropertyNameFromMethod('FirstName'));
+    }
+
+    public function testMethodToPropertyParserForArrays()
+    {
+        $this->assertEquals('roles', Model::parsePropertyNameFromMethod('addRole', Model::P_ADD));
+        $this->assertEquals('roles', Model::parsePropertyNameFromMethod('removeRole', Model::P_REMOVE));
+        $this->assertEquals('roles', Model::parsePropertyNameFromMethod('setRoles'));
+        $this->assertEquals('roles', Model::parsePropertyNameFromMethod('getRoles'));
+    }
+
+    public function testMethodTypeParser()
+    {
+        $this->assertEquals(Model::P_GET, Model::parsePropertyActionFromMethod('getRoles'));
+        $this->assertEquals(Model::P_SET, Model::parsePropertyActionFromMethod('setRoles'));
+        $this->assertEquals(Model::P_ADD, Model::parsePropertyActionFromMethod('addRole'));
+        $this->assertEquals(Model::P_REMOVE, Model::parsePropertyActionFromMethod('removeRole'));
+        $this->assertEquals(Model::F_FINDONEBY, Model::parsePropertyActionFromMethod('findOneByFirstName'));
+        $this->assertEquals(Model::F_FINDBY, Model::parsePropertyActionFromMethod('findByFirstName'));
+        $this->assertEquals(null, Model::parsePropertyActionFromMethod('invalidCall'));
+    }
+
+    public function testFindByFinderFunction()
+    {
+        $this->assertTrue(Model::isLikeFindByCall('findBy'));
+        $this->assertTrue(Model::isLikeFindByCall('findById'));
+        $this->assertTrue(Model::isLikeFindByCall('findOneById'));
+        $this->assertFalse(Model::isLikeFindByCall('_findOneById'));
+    }
+
+    public function testPropertyGetSetFinderFunction()
+    {
+        $this->assertTrue(Model::isLikePropertyGetSet('getFirstName'));
+        $this->assertTrue(Model::isLikePropertyGetSet('setFirstName'));
+        $this->assertTrue(Model::isLikePropertyGetSet('addRole'));
+        $this->assertTrue(Model::isLikePropertyGetSet('removeRole'));
+        $this->assertFalse(Model::isLikePropertyGetSet('_removeRole'));
+    }
+
+    public function testModelHashStringDontOverlap()
+    {
+        $this->assertNotEquals(UserFuncs::hash(1), UserProps::hash(1));
+    }
+
+    public function testCreateStaticMethodSetsAllGiveProperties()
+    {
+        $model = UserProps::create([
+            'first_name' => 'Marcos',
+            'last_name' => 'Minond',
+            'age' => 24,
+        ]);
+
+        $this->assertEquals('Marcos', $model->first_name);
+        $this->assertEquals('Minond', $model->last_name);
+        $this->assertEquals(24, $model->age);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testPassingInvalidPropertyToCreateMethodTriggersError()
+    {
+        $model = UserProps::create([
+            'first_name' => 'Marcos',
+            'last_name' => 'Minond',
+            'age' => 24,
+            'invalid' => 24,
+        ]);
     }
 }

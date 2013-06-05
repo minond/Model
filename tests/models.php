@@ -5,12 +5,16 @@ use dataset\Model;
 class UserProps extends Model
 {
     protected $first_name;
+    protected $last_name;
+    protected $age;
+    protected $colors = [];
 }
 
-class UserFuncs extends UserProps
+class UserFuncs extends Model
 {
     public $set = false;
     public $get = false;
+    protected $first_name;
 
     public function setFirstName($fn)
     {
