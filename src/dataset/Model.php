@@ -5,7 +5,7 @@ namespace dataset;
 /**
  * basic model with persistence methods
  */
-class Model
+class Model implements \JsonSerializable
 {
     /**
      * property getter/setter/add/remove flags
@@ -276,6 +276,15 @@ class Model
     public static function hash($id)
     {
         return get_called_class() . '_' . $id;
+    }
+
+    /**
+     * @see JsonSerializable
+     */
+    public function jsonSerialize()
+    {
+        // excludes private properties
+        return get_object_vars($this);
     }
 
     /**
