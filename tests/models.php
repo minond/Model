@@ -1,6 +1,6 @@
 <?php
 
-use dataset\Model;
+use Efficio\Dataset\Model;
 
 class UserProps extends Model
 {

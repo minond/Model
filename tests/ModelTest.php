@@ -1,6 +1,6 @@
 <?php
 
-use dataset\Model;
+use Efficio\Dataset\Model;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'models.php';
 

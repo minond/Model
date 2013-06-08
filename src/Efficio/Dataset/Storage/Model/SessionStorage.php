@@ -1,6 +1,6 @@
 <?php
 
-namespace dataset\storage\model;
+namespace Efficio\Dataset\Storage\Model;
 
 trait SessionStorage
 {

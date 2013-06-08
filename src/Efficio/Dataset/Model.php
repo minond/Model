@@ -1,6 +1,6 @@
 <?php
 
-namespace dataset;
+namespace Efficio\Dataset;
 
 /**
  * basic model with persistence methods
