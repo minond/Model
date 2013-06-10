@@ -1,6 +1,9 @@
 <?php
 
+namespace Efficio\Tests\Dataset;
+
 use Efficio\Dataset\Model;
+use PHPUnit_Framework_TestCase;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'models.php';
 
@@ -182,5 +185,55 @@ class ModelTest extends PHPUnit_Framework_TestCase
             'age' => 24,
             'invalid' => 24,
         ]);
+    }
+
+    public function testStandardToStringIncludesClassAndModelsId()
+    {
+        $model = new UserProps;
+        $model->setId('id');
+        $expected = str_replace('\\', '.', strtolower(get_class($model))) .
+            ':' . $model->getId();
+
+        $this->assertEquals($expected, (string) $model);
+    }
+
+    public function testJsonEncodingModelsCanBeDecoded()
+    {
+        $model = new BasicModel;
+        $model->first_name = 'FirstName';
+        $model->last_name = 'LastName';
+        $model->id = 'ID';
+        $json = json_encode($model);
+        $deco = json_decode($json, true);
+        $this->assertEquals([
+            'first_name' => 'FirstName',
+            'last_name' => 'LastName',
+            'id' => 'ID',
+        ], $deco);
+    }
+
+    public function testCreatingStorageTraits()
+    {
+        Model::saveTo('\Efficio\Dataset\Storage\Model\SessionStorage', 'ValidStorage');
+        $this->assertTrue(trait_exists('\Efficio\Dataset\Storage\Model\ValidStorage'));
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage \Efficio\Dataset\Storage\Model\ErrorStorage has already been defined
+     */
+    public function testRecreatingStorageTraitsWithSameNameTriggersError()
+    {
+        Model::saveTo('\Efficio\Dataset\Storage\Model\SessionStorage', 'ErrorStorage');
+        Model::saveTo('\Efficio\Dataset\Storage\Model\SessionStorage', 'ErrorStorage');
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Invalid storage trait: \Efficio\Dataset\Storage\Model\InvalidSessionStorage
+     */
+    public function testCreatingStorageTraitsUsingInvalidStorageDriversTriggersErrors()
+    {
+        Model::saveTo('\Efficio\Dataset\Storage\Model\InvalidSessionStorage');
     }
 }

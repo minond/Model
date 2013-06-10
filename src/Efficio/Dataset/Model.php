@@ -194,6 +194,16 @@ class Model implements \JsonSerializable
     }
 
     /**
+     * to string
+     * @return string
+     */
+    public function __toString()
+    {
+        return str_replace('\\', '.', strtolower(get_called_class())) .
+            ':' . $this->id;
+    }
+
+    /**
      * saves a model. returns save success
      * @codeCoverageIgnore
      * @throws Exception
@@ -389,14 +399,17 @@ class Model implements \JsonSerializable
      */
     final public static function saveto($storage, $tname = 'Storage')
     {
-        $ns = __NAMESPACE__;
+        $ns = __NAMESPACE__ . '\Storage\Model';
+        $ss = '\\';
 
-        if (trait_exists("{$ns}\{$tname}")) {
-            throw new \Exception("{$ns}\{$tname} has already been defined");
-        } else if (!trait_exists($storage)) {
+        if (trait_exists("{$ss}{$ns}{$ss}{$tname}")) {
+            throw new \Exception("{$ss}{$ns}{$ss}{$tname} has already been defined");
+        }
+
+        if (!trait_exists($storage)) {
             throw new \Exception("Invalid storage trait: {$storage}");
         }
 
-        eval("namespace {$ns}\storage\model; trait {$tname} { use {$storage}; }");
+        eval("namespace {$ns}; trait {$tname} { use {$storage}; }");
     }
 }
