@@ -51,9 +51,11 @@ trait SessionStorage
     {
         $key = '__models__';
 
-        if (!session_id()) {
+        if (!session_id())
+            // sessions is always created before tests
+            // @codeCoverageIgnoreStart
             session_start();
-        }
+            // @codeCoverageIgnoreEnd
 
         if (!isset($_SESSION[ $key ])) {
             $_SESSION[ $key ] = [];

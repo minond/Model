@@ -5,7 +5,7 @@ namespace Efficio\Tests\Dataset;
 use Efficio\Dataset\Model;
 use PHPUnit_Framework_TestCase;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'models.php';
+require_once './tests/mocks/models.php';
 
 class ModelTest extends PHPUnit_Framework_TestCase
 {
