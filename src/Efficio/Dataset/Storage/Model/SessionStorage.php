@@ -49,7 +49,7 @@ trait SessionStorage
      */
     public static function init()
     {
-        $key = '__models__';
+        $key = '__models__' . get_called_class();
 
         if (!session_id())
             // sessions is always created before tests
