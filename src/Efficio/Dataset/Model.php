@@ -290,11 +290,18 @@ class Model implements \JsonSerializable
 
     /**
      * @see JsonSerializable
+     * @return array
      */
     public function jsonSerialize()
     {
+        $data = [];
+
         // excludes private properties
-        return get_object_vars($this);
+        foreach (get_object_vars($this) as $prop => $val) {
+            $data[ $prop ] = $this->__get($prop);
+        }
+
+        return $data;
     }
 
     /**

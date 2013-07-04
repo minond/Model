@@ -27,7 +27,9 @@ trait SessionStorage
     public function save()
     {
         if (!session_id()) {
+            // @codeCoverageIgnoreStart
             throw new \Exception('Cannot save to session');
+            // @codeCoverageIgnoreEnd
         }
 
         static::$sess[ static::hash($this->id) ] = serialize($this);
@@ -45,11 +47,20 @@ trait SessionStorage
     }
 
     /**
+     * unique class hash
+     * @return string
+     */
+    public static function sessionHash()
+    {
+        return '__models__' . get_called_class();
+    }
+
+    /**
      * starts a new session
      */
     public static function init()
     {
-        $key = '__models__' . get_called_class();
+        $key = self::sessionHash();
 
         if (!session_id())
             // sessions is always created before tests

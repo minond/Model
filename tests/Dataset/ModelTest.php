@@ -236,4 +236,48 @@ class ModelTest extends PHPUnit_Framework_TestCase
     {
         Model::saveTo('\Efficio\Dataset\Storage\Model\InvalidSessionStorage');
     }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Invalid static method test called on class Efficio\Tests\Dataset\BasicModel
+     */
+    public function testCallingInvalidStaticMethodsThrowsAnException()
+    {
+        BasicModel::test();
+    }
+
+    public function testDynamicFindByMethods()
+    {
+        $model = new BasicSessionModel;
+        $model->first_name = 'Marcos';
+        $model->last_name = 'Minond' ;
+        $model->save();
+
+        $model = new BasicSessionModel;
+        $model->first_name = 'Marcos';
+        $model->last_name = 'Minond' ;
+        $model->save();
+
+        $models = BasicSessionModel::findByLastName('Minond');
+        unset($_SESSION[ BasicSessionModel::sessionHash() ]);
+        $this->assertEquals(2, count($models));
+    }
+
+    public function testDynamicFindOneByMethods()
+    {
+        $model = new BasicSessionModel;
+        $model->first_name = 'Marcos';
+        $model->last_name = 'Minond' ;
+        $model->save();
+
+        $model = new BasicSessionModel;
+        $model->first_name = 'Marcos';
+        $model->last_name = 'Minond' ;
+        $model->save();
+
+        $model = BasicSessionModel::findOneByFirstName('Marcos');
+        unset($_SESSION[ BasicSessionModel::sessionHash() ]);
+        $this->assertTrue(!is_null($model));
+        $this->assertTrue($model instanceof BasicSessionModel);
+    }
 }
