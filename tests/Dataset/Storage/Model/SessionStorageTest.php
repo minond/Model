@@ -18,6 +18,14 @@ class SessionStorageTest extends PHPUnit_Framework_TestCase
         $this->model = new BasicSessionModel;
     }
 
+    public function tearDown()
+    {
+        if (isset($_SESSION)) {
+            $key = BasicSessionModel::sessionHash();
+            unset($_SESSION[ $key ]);
+        }
+    }
+
     public function testNewModelsGetAnId()
     {
         $this->assertNotNull($this->model->id);
@@ -69,6 +77,54 @@ class SessionStorageTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals(3, count($models));
+    }
+
+    public function testFindByFunctionTriggersCallBackPerResult()
+    {
+        $models = 0;
+
+        $model1 = new BasicSessionModel;
+        $model2 = new BasicSessionModel;
+        $model3 = new BasicSessionModel;
+        $model1->last_name = 'findbyfunctiontest';
+        $model2->last_name = 'findbyfunctiontest';
+        $model3->last_name = 'findbyfunctiontest';
+        $model1->save();
+        $model2->save();
+        $model3->save();
+
+        BasicSessionModel::findBy([
+            'last_name' => 'findbyfunctiontest',
+        ], function(BasicSessionModel $model) use(& $models) {
+            $models++;
+        });
+
+        $this->assertEquals(3, $models);
+    }
+
+    public function testFindByFunctionTriggersCallBackPerResultAndReturnsAnArrayOrCallbackResponses()
+    {
+        $model1 = new BasicSessionModel;
+        $model2 = new BasicSessionModel;
+        $model3 = new BasicSessionModel;
+        $model1->last_name = 'findbyfunctiontest';
+        $model2->last_name = 'findbyfunctiontest';
+        $model3->last_name = 'findbyfunctiontest';
+        $model1->first_name = 1;
+        $model2->first_name = 2;
+        $model3->first_name = 3;
+        $model1->save();
+        $model2->save();
+        $model3->save();
+
+        $responses = BasicSessionModel::findBy([
+            'last_name' => 'findbyfunctiontest',
+        ], function(BasicSessionModel $model) {
+            return $model->first_name;
+        });
+
+        sort($responses);
+        $this->assertEquals([1, 2, 3], $responses);
     }
 
     public function testFindByFunctionReturnsEmptyArrayOnNoMatches()

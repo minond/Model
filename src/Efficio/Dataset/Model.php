@@ -242,9 +242,10 @@ class Model implements \JsonSerializable
      * find models using a set of criteria
      * @codeCoverageIgnore
      * @param array $criteria
-     * @return Model[]
+     * @param callback $cb
+     * @return mixed[]|Model[]
      */
-    public static function findBy(array $criteria)
+    public static function findBy(array $criteria, callable $cb = null)
     {
         throw new \Exception(sprintf('Cannot call undefined method %s::%s',
             get_called_class(), __FUNCTION__));

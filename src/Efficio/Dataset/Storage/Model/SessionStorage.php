@@ -92,9 +92,10 @@ trait SessionStorage
     /**
      * find models using a set of criteria
      * @param array $criteria
-     * @return Model[]
+     * @param callback $cb
+     * @return mixed[]|Model[]
      */
-    public static function findBy(array $criteria)
+    public static function findBy(array $criteria, callable $cb = null)
     {
         $matches = [];
         static::init();
@@ -111,7 +112,12 @@ trait SessionStorage
             }
 
             if ($match) {
-                $matches[] = $model;
+                if (is_callable($cb)) {
+                    $matches[] = $cb($model);
+                    // var_dump($matches);
+                } else {
+                    $matches[] = $model;
+                }
             }
 
             unset($model);
