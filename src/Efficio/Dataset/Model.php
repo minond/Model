@@ -22,6 +22,11 @@ class Model implements \JsonSerializable
     const F_FINDONEBY = 'findOneBy';
 
     /**
+     * default primary key's label
+     */
+    const DEFAULT_PRIMARY_KEY = 'id';
+
+    /**
      * model's unique identifier
      * @var mixed
      */
@@ -34,7 +39,7 @@ class Model implements \JsonSerializable
      * @throws Exception
      * @return mixed
      */
-    final public function __call($method, $args)
+    public function __call($method, $args)
     {
         $error = true;
         $ret = null;
@@ -103,7 +108,7 @@ class Model implements \JsonSerializable
      * @throw Exception
      * @return Model|Model[]
      */
-    final public static function __callStatic($method, $args)
+    public static function __callStatic($method, $args)
     {
         $error = true;
         $matches = [];
@@ -146,7 +151,7 @@ class Model implements \JsonSerializable
      * @throws Exception
      * @return mixed
      */
-    final public function __set($prop, $val)
+    public function __set($prop, $val)
     {
         if (property_exists($this, $prop)) {
             $setter = self::generateSetterMethodName($prop);
@@ -172,7 +177,7 @@ class Model implements \JsonSerializable
      * @throws Exception
      * @return mixed
      */
-    final public function __get($prop)
+    public function __get($prop)
     {
         $ret = null;
 
@@ -295,6 +300,14 @@ class Model implements \JsonSerializable
      */
     public function jsonSerialize()
     {
+        return $this->toArray();
+    }
+
+    /*
+     * @return array
+     */
+    public function toArray()
+    {
         $data = [];
 
         // excludes private properties
@@ -303,6 +316,14 @@ class Model implements \JsonSerializable
         }
 
         return $data;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFields()
+    {
+        return array_keys(get_object_vars(new static));
     }
 
     /**
@@ -389,7 +410,7 @@ class Model implements \JsonSerializable
             // addRole => $roles[]
             case self::P_ADD:
             case self::P_REMOVE:
-                $prop .= 's';
+                $prop = self::pluralize($prop);
                 break;
 
             // setName = $name
@@ -398,6 +419,17 @@ class Model implements \JsonSerializable
         }
 
         return $prop;
+    }
+
+    /**
+     * pluralizes a word
+     * @param string $work
+     * @return string
+     */
+    final public static function pluralize($word)
+    {
+        // yup
+        return $word . 's';
     }
 
     /**

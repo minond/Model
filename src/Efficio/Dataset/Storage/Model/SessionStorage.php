@@ -20,9 +20,9 @@ trait SessionStorage
     }
 
     /**
-     * saves model to session
+     * saves model to session. returns model's id
      * @throws Exception
-     * @return boolean
+     * @return string
      */
     public function save()
     {
@@ -33,7 +33,7 @@ trait SessionStorage
         }
 
         static::$sess[ static::hash($this->id) ] = serialize($this);
-        return true;
+        return $this->id;
     }
 
     /**

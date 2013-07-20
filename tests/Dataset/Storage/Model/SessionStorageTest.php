@@ -33,7 +33,7 @@ class SessionStorageTest extends PHPUnit_Framework_TestCase
 
     public function testModelsCanBeSaved()
     {
-        $this->assertTrue($this->model->save());
+        $this->assertNotNull($this->model->save());
     }
 
     public function testModelsCanBeFoundById()
