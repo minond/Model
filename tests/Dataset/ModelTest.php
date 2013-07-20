@@ -263,6 +263,11 @@ class ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($models));
     }
 
+    public function testFieldsGetter()
+    {
+        $this->assertEquals(['first_name', 'last_name', 'id'], BasicSessionModel::getFields());
+    }
+
     public function testDynamicFindOneByMethods()
     {
         $model = new BasicSessionModel;
