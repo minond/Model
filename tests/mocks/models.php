@@ -4,6 +4,7 @@ namespace Efficio\Tests\Dataset;
 
 use Efficio\Dataset\Model;
 use Efficio\Dataset\Storage\Model\SessionStorage;
+use Efficio\Dataset\Storage\Model\DatabaseStorage;
 
 class BasicModel extends Model
 {
@@ -41,4 +42,25 @@ class UserFuncs extends Model
 class BasicSessionModel extends BasicModel
 {
     use SessionStorage;
+}
+
+class Post extends Model
+{
+    use DatabaseStorage;
+
+    protected $label;
+    protected $created_date;
+}
+
+class ImportantPost extends Post
+{
+}
+
+class Comment extends Model
+{
+    use DatabaseStorage;
+
+    protected $text;
+    protected $user_id;
+    protected $post_id;
 }
