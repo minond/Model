@@ -4,6 +4,7 @@ namespace Efficio\Dataset\Storage\Model;
 
 use PDO;
 use PDOStatement;
+use Efficio\Utilitatis\Word;
 
 trait DatabaseStorage
 {
@@ -154,7 +155,8 @@ trait DatabaseStorage
         $class = get_called_class();
         $class = explode('\\', $class);
         $class = array_pop($class);
-        return self::pluralize(strtolower($class));
+        $word = new Word;
+        return $word->pluralize($class);
     }
 
     /**

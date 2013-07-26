@@ -2,6 +2,8 @@
 
 namespace Efficio\Dataset;
 
+use Efficio\Utilitatis\Word;
+
 /**
  * basic model with persistence methods
  */
@@ -410,7 +412,8 @@ class Model implements \JsonSerializable
             // addRole => $roles[]
             case self::P_ADD:
             case self::P_REMOVE:
-                $prop = self::pluralize($prop);
+                $word = new Word;
+                $prop = $word->pluralize($prop);
                 break;
 
             // setName = $name
@@ -419,17 +422,6 @@ class Model implements \JsonSerializable
         }
 
         return $prop;
-    }
-
-    /**
-     * pluralizes a word
-     * @param string $work
-     * @return string
-     */
-    final public static function pluralize($word)
-    {
-        // yup
-        return $word . 's';
     }
 
     /**
