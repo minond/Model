@@ -1,6 +1,8 @@
 Model [![Build Status](https://travis-ci.org/minond/Model.png?branch=master)](https://travis-ci.org/minond/Model)
 =====
 
+Models that are simple to create and use. Light weight but easily extensible.
+
 #### Getters and setters will be simulated using the magic call method:
 
 ```php
