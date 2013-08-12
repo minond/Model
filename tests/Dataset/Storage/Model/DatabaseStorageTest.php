@@ -162,4 +162,32 @@ class DatabaseStorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([1, 2], $match);
         $this->assertEquals($returns, $results);
     }
+
+    public function testModelsCanBeSavedUsingStaticCreateMethod()
+    {
+        $model = Post::create([ 'label' => 'Marcos' ], true);
+        $this->assertNotNull($model->id);
+    }
+
+    public function testModelsAreNotSavedByDefaultWhenUsingTheStaticCreateMethod()
+    {
+        $model = Post::create([ 'label' => 'Marcos' ]);
+        $this->assertNull($model->id);
+    }
+
+    public function testModelsAreNotSavedByDefaultWhenCallingTheUpdateMethod()
+    {
+        $model = Post::create([ 'label' => 'Marcos' ]);
+        $model->update([ 'label' => 'NotMarcos' ]);
+        $this->assertNull($model->id);
+        $this->assertEquals('NotMarcos', $model->label);
+    }
+
+    public function testModelsCanBeSavedWhenCallingTheUpdateMethod()
+    {
+        $model = Post::create([ 'label' => 'Marcos' ]);
+        $model->update([ 'label' => 'NotMarcos' ], true);
+        $this->assertNotNull($model->id);
+        $this->assertEquals('NotMarcos', $model->label);
+    }
 }

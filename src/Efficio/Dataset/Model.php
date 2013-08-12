@@ -211,6 +211,24 @@ class Model implements \JsonSerializable
     }
 
     /**
+     * shortcut method. updates properties and saves a model
+     * @param array $updates
+     * @param boolean $save
+     */
+    public function update(array $updates, $save = false)
+    {
+        foreach ($updates as $field => $value) {
+            $this->__set($field, $value);
+        }
+
+        if ($save) {
+            $this->save();
+        }
+
+        return $this;
+    }
+
+    /**
      * saves a model. returns save success
      * @codeCoverageIgnore
      * @throws Exception
@@ -272,15 +290,20 @@ class Model implements \JsonSerializable
 
     /**
      * @param array $data
+     * @param boolean $save
      * @return Model
      */
-    public static function create(array $data)
+    public static function create(array $data, $save = false)
     {
         $class = get_called_class();
         $model = new $class;
 
         foreach ($data as $prop => $val) {
             $model->__set($prop, $val);
+        }
+
+        if ($save) {
+            $model->save();
         }
 
         return $model;
