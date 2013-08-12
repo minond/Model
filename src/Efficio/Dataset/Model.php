@@ -280,7 +280,7 @@ class Model implements \JsonSerializable
         $model = new $class;
 
         foreach ($data as $prop => $val) {
-            $model->{ $prop } = $val;
+            $model->__set($prop, $val);
         }
 
         return $model;
