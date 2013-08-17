@@ -225,21 +225,30 @@ trait DatabaseStorage
     protected static function generateUpdateQuery($id, $fields)
     {
         $updates = [];
+        $query = null;
 
         foreach ($fields as $field => $value) {
             $updates[] = sprintf(
                 '%s = %s',
                 $field,
-                is_numeric($value) ? $value : "'{$value}'"
+                self::field($field)
             );
         }
 
-        return static::$conn->prepare(sprintf(
+        $query = static::$conn->prepare(sprintf(
             'update %s set %s where `id` = %s',
             self::getTableName(),
             implode(', ', $updates),
             $id
         ));
+
+
+        foreach ($fields as $field => & $value) {
+            $query->bindParam(self::field($field), $value);
+            unset($field);
+        }
+
+        return $query;
     }
 
     /**
@@ -249,10 +258,13 @@ trait DatabaseStorage
      */
     protected static function generateDeleteQuery($id)
     {
-        return static::$conn->prepare(sprintf(
+        $query = static::$conn->prepare(sprintf(
             'delete from %s where `id` = %s',
             self::getTableName(),
-            $id
+            self::field('id')
         ));
+
+        $query->bindParam(self::field('id'), $id);
+        return $query;
     }
 }
