@@ -1,4 +1,4 @@
-Model [![Build Status](https://travis-ci.org/minond/Model.png?branch=master)](https://travis-ci.org/minond/Model)
+Model [![Build Status](https://travis-ci.org/minond/Model.png?branch=master)](https://travis-ci.org/minond/Model) [![Coverage Status](https://coveralls.io/repos/minond/Model/badge.png?branch=master)](https://coveralls.io/r/minond/Model?branch=master)
 =====
 
 Models that are simple to create and use. Light weight but easily extensible.
