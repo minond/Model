@@ -52,21 +52,26 @@ trait DatabaseStorage
      */
     public function save()
     {
-        $data = $this->toArray();
+        $data = [];
         $updates = [];
 
-        foreach ($this->update_tracking as $field) {
-            if (isset($data[ $field ])) {
-                $updates[ $field ] = $data[ $field ];
+        if (count($this->update_tracking)) {
+            $data = $this->toArray();
+
+            foreach ($this->update_tracking as $field) {
+                if (isset($data[ $field ])) {
+                    $updates[ $field ] = $data[ $field ];
+                }
             }
+
+            if (!$this->id)
+                self::generateInsertQuery($updates)->execute();
+            else
+                self::generateUpdateQuery($this->id, $updates)->execute();
+
+            $this->update_tracking = [];
         }
 
-        if (!$this->id)
-            self::generateInsertQuery($updates)->execute();
-        else
-            self::generateUpdateQuery($this->id, $updates)->execute();
-
-        $this->update_tracking = [];
         return $this->id ?: $this->id = static::$conn->lastInsertId();
     }
 

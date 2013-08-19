@@ -190,4 +190,11 @@ class DatabaseStorageTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($model->id);
         $this->assertEquals('NotMarcos', $model->label);
     }
+
+    public function testSavingModelsThatHaventBeenUpdated()
+    {
+        $model = Post::create([ 'label' => 'Marcos' ]);
+        $model->save();
+        $model->save();
+    }
 }
