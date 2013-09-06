@@ -252,6 +252,17 @@ class Model implements \JsonSerializable
     }
 
     /**
+     * returns all models
+     * @codeCoverageIgnore
+     * @return Model[]
+     */
+    public static function all()
+    {
+        throw new \Exception(sprintf('Cannot call undefined method %s::%s',
+            get_called_class(), __FUNCTION__));
+    }
+
+    /**
      * find a model using a unique identifier
      * @codeCoverageIgnore
      * @param mixed $id

@@ -95,6 +95,28 @@ trait DatabaseStorage
     }
 
     /**
+     * @param Callable $db
+     * @return Model[]
+     */
+    public static function all(Callable $cb = null)
+    {
+        $results = [];
+        $query = self::generateSelectStatement([]);
+        $query->execute();
+
+        if ($cb) {
+            while ($model = $query->fetchObject(get_called_class())) {
+                $results[] = $cb($model);
+                unset($model);
+            }
+        } else {
+            $results = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+        }
+
+        return $results;
+    }
+
+    /**
      * @param int $id
      * @return Model
      */
@@ -108,10 +130,10 @@ trait DatabaseStorage
     /**
      * find models using a set of criteria
      * @param array $criteria
-     * @param callback $cb
+     * @param Callable $cb
      * @return mixed[]|Model[]
      */
-    public static function findBy(array $criteria, callable $cb = null)
+    public static function findBy(array $criteria, Callable $cb = null)
     {
         $results = [];
         $query = self::generateSelectStatement($criteria);
@@ -183,12 +205,20 @@ trait DatabaseStorage
             );
         }
 
-        $query = static::$conn->prepare(sprintf(
-            'select %s from %s where %s',
+        $query = sprintf(
+            'select %s from %s',
             implode(', ', $fields),
-            self::getTableName(),
-            implode(' and ', $sfilters)
-        ));
+            self::getTableName()
+        );
+
+        if (count($filters)) {
+            $query .= sprintf(
+                ' where %s',
+                implode(' and ', $sfilters)
+            );
+        }
+
+        $query = static::$conn->prepare($query);
 
         foreach ($filters as $field => & $value) {
             $query->bindParam(self::field($field), $value);
