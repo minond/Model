@@ -6,6 +6,9 @@ use PDO;
 use PDOStatement;
 use Efficio\Utilitatis\Word;
 
+/**
+ * @todo sql queries should not be generated in the class
+ */
 trait DatabaseStorage
 {
     /**

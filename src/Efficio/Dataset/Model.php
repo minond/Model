@@ -207,7 +207,7 @@ class Model implements \JsonSerializable
     public function __toString()
     {
         return str_replace('\\', '.', strtolower(get_called_class())) .
-            ':' . $this->id;
+            ':' . ($this->id ?: spl_object_hash($this));
     }
 
     /**
