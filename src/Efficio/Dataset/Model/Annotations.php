@@ -22,10 +22,15 @@ abstract class Annotations
      *
      * class Book extends Model
      * {
-     *    \/**
+     *    /**
+     *      * this is *NOT* saved with the model
      *      * @virtual
-     *      *\/
+     *      * /
      *     protected $backwards_title;
+     *
+     *    /**
+     *      * this *IS* saved with the model
+     *      * /
      *     protected $title;
      *
      *     protected getBackwardsTitle()
