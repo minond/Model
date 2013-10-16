@@ -56,6 +56,17 @@ class ImportantPost extends Post
 {
 }
 
+/**
+ * @table posts
+ */
+class AnnotatedPost extends Post
+{
+    /**
+     * @virtual
+     */
+    protected $ignored;
+}
+
 class Comment extends Model
 {
     use DatabaseStorage;

@@ -5,6 +5,8 @@ namespace Efficio\Dataset\Storage\Model;
 use PDO;
 use PDOStatement;
 use Efficio\Utilitatis\Word;
+use Efficio\Utilitatis\Annotation;
+use Efficio\Dataset\Model\Annotations;
 
 /**
  * @todo sql queries should not be generated in the class
@@ -17,6 +19,11 @@ trait DatabaseStorage
     protected static $conn;
 
     /**
+     * @var Annotation
+     */
+    private static $annotation;
+
+    /**
      * tracks which fields have been updates
      * @var array
      */
@@ -27,8 +34,16 @@ trait DatabaseStorage
      */
     public function __set($var, $val)
     {
-        if ($var !== self::DEFAULT_PRIMARY_KEY)
+        if (!static::$annotation) {
+            static::$annotation = new Annotation(get_class($this));
+        }
+
+        if (
+            $var !== self::DEFAULT_PRIMARY_KEY &&
+            !static::$annotation->doc($var, Annotations::FLAG_PROP_MODIFIER_VIRTUAL)
+        ) {
             $this->update_tracking[] = $var;
+        }
 
         return parent::__set($var, $val);
     }
