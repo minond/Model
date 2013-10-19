@@ -62,22 +62,6 @@ trait CollectionAccess
     }
 
     /**
-     * @see Serializable::serialize
-     */
-    public function serialize()
-    {
-        return serialize($this->storage);
-    }
-
-    /**
-     * @see Serializable::unserialize
-     */
-    public function unserialize($serialized)
-    {
-        $this->strorage = unserialize($serialized);
-    }
-
-    /**
      * @see Efficio\Dataset\Collection::isCollectionOf
      */
     public function isCollectionOf($model_class)

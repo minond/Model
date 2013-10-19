@@ -7,7 +7,7 @@ use Serializable;
 use Countable;
 use JsonSerializable;
 
-interface Collection extends ArrayAccess, Serializable, Countable, JsonSerializable
+interface Collection extends ArrayAccess, Countable, JsonSerializable
 {
     /**
      * @param object|string $model_class
