@@ -117,5 +117,28 @@ class DynamicCollectionTest extends PHPUnit_Framework_TestCase
         $posts = new DynamicCollection('Efficio\Tests\Dataset\Post');
         $posts[] = new \Efficio\Tests\Dataset\UserProps;
     }
+
+    public function testToStringMethodStringifiesAllModels()
+    {
+        $this->expectOutputString('efficio.dataset.collection.dynamiccollection[1]{ efficio.tests.dataset.post:1 }');
+        $posts = new DynamicCollection('Efficio\Tests\Dataset\Post');
+        $posts[] = \Efficio\Tests\Dataset\Post::create([ 'id' => 1 ]);
+        echo $posts;
+    }
+
+    public function testJsonEncodingCollectionsEncodesModels()
+    {
+        $this->expectOutputString('[{"label":null,"created_date":null,"id":1}]');
+        $posts = new DynamicCollection('Efficio\Tests\Dataset\Post');
+        $posts[] = \Efficio\Tests\Dataset\Post::create([ 'id' => 1 ]);
+        echo json_encode($posts);
+    }
+
+    // public function testCollectionsCanBeSerializedAndUnserialized()
+    // {
+    //     $posts = new DynamicCollection('Efficio\Tests\Dataset\Post');
+    //     $posts[] = \Efficio\Tests\Dataset\Post::create([ 'id' => 1 ]);
+    //     echo serialize($posts);
+    // }
 }
 

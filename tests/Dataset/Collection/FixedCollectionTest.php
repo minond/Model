@@ -3,9 +3,11 @@
 namespace Efficio\Tests\Dataset;
 
 use Efficio\Dataset\Collection\FixedCollection;
+use Efficio\Tests\Dataset\FixedUsers;
 use PHPUnit_Framework_TestCase;
 
 require_once './tests/mocks/models.php';
+require_once './tests/mocks/collections.php';
 
 class FixedCollectionTest extends PHPUnit_Framework_TestCase
 {
@@ -98,15 +100,11 @@ class FixedCollectionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Efficio\Tests\Dataset\Post', $coll->collectionOf());
     }
 
-//     public function testSettingOffsetWithValidModel()
-//     {
-//         $posts = new FixedCollection('Efficio\Tests\Dataset\Post');
-//         $this->assertEquals(0, count($posts));
-//         $posts[] = new \Efficio\Tests\Dataset\Post;
-//         $this->assertEquals(1, count($posts));
-//         $posts[] = new \Efficio\Tests\Dataset\Post;
-//         $this->assertEquals(2, count($posts));
-//     }
+    public function testArraySizeCanBePassedToConstructor()
+    {
+        $users = new FixedUsers(100);
+        $this->assertEquals(100, count($users));
+    }
 
     /**
      * @expectedException InvalidArgumentException
@@ -116,6 +114,13 @@ class FixedCollectionTest extends PHPUnit_Framework_TestCase
     {
         $posts = new FixedCollection('Efficio\Tests\Dataset\Post');
         $posts[] = new \Efficio\Tests\Dataset\UserProps;
+    }
+
+    public function testToStringMethodStringifiesAllModels()
+    {
+        $this->expectOutputString('efficio.tests.dataset.fixedusers[100]{ , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,  }');
+        $users = new FixedUsers(100);
+        echo $users;
     }
 }
 
