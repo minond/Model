@@ -90,10 +90,39 @@ trait SessionStorage
     }
 
     /**
+     * @param callback $cb
+     * @return mixed[]|Collection
+     */
+    public static function all(callable $cb = null)
+    {
+        $matches = [];
+        static::init();
+
+        foreach (static::$sess as $hash => & $ser) {
+            $model = unserialize($ser);
+
+            if (is_callable($cb)) {
+                $matches[] = $cb($model);
+            } else {
+                $matches[] = $model;
+            }
+
+            unset($model);
+            unset($ser);
+        }
+
+        if (!is_callable($cb)) {
+            $matches = static::getCollection($matches);
+        }
+
+        return $matches;
+    }
+
+    /**
      * find models using a set of criteria
      * @param array $criteria
      * @param callback $cb
-     * @return mixed[]|Model[]
+     * @return mixed[]|Collection
      */
     public static function findBy(array $criteria, callable $cb = null)
     {
@@ -114,7 +143,6 @@ trait SessionStorage
             if ($match) {
                 if (is_callable($cb)) {
                     $matches[] = $cb($model);
-                    // var_dump($matches);
                 } else {
                     $matches[] = $model;
                 }

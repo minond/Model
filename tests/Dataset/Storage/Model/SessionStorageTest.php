@@ -60,6 +60,39 @@ class SessionStorageTest extends PHPUnit_Framework_TestCase
         $this->assertNull(BasicSessionModel::find($id));
     }
 
+    public function testAllFunctionReturnsCallbackReturns()
+    {
+        $model1 = new BasicSessionModel;
+        $model2 = new BasicSessionModel;
+        $model3 = new BasicSessionModel;
+        $model1->save();
+        $model2->save();
+        $model3->save();
+
+        $ids = BasicSessionModel::all(function(BasicSessionModel $model) {
+            return $model->id;
+        });
+
+        $this->assertEquals(3, count($ids));
+        $this->assertEquals([$model1->id, $model2->id, $model3->id], $ids);
+    }
+
+    public function testAllFunctionReturnsAllModelsWhenNoCallbackIsPassed()
+    {
+        $model1 = new BasicSessionModel;
+        $model2 = new BasicSessionModel;
+        $model3 = new BasicSessionModel;
+        $model1->save();
+        $model2->save();
+        $model3->save();
+
+        $models = BasicSessionModel::all();
+        $this->assertEquals(3, count($models));
+        $this->assertEquals($model1->id, $models[0]->id);
+        $this->assertEquals($model2->id, $models[1]->id);
+        $this->assertEquals($model3->id, $models[2]->id);
+    }
+
     public function testFindByFunction()
     {
         $model1 = new BasicSessionModel;
