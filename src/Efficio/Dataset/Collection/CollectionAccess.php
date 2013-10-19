@@ -2,6 +2,8 @@
 
 namespace Efficio\Dataset\Collection;
 
+use InvalidArgumentException;
+
 trait CollectionAccess
 {
     /**
