@@ -163,6 +163,49 @@ class DatabaseStorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($returns, $results);
     }
 
+    public function testAllModelsCanBeRetrieved()
+    {
+        $post1 = new Post;
+        $id1 = $post1->save();
+
+        $post2 = new Post;
+        $id2 = $post2->save();
+
+        $results = Post::all();
+        $this->assertEquals(2, count($results));
+        $this->assertTrue($results[0] instanceof Post);
+        $this->assertTrue($results[1] instanceof Post);
+        $this->assertEquals($id1, $results[0]->id);
+        $this->assertEquals($id2, $results[1]->id);
+    }
+
+    public function testAllModelsCanBeRetrievedAndAreSentToTheCallbackFunction()
+    {
+        $count = 0;
+        $ids = [];
+        $match = [];
+        $returns = [ mt_rand(), mt_rand() ];
+
+        $post1 = new Post;
+        $ids[] = $post1->save();
+
+        $post2 = new Post;
+        $ids[] = $post2->save();
+
+        $results = Post::all(function(Post $post) use(
+            & $count,
+            & $match,
+            $returns,
+            $ids
+        ) {
+            $match[] = (int) $ids[ $count ] === (int) $post->id;
+            return $returns[ $count++ ];
+        });
+
+        $this->assertEquals([1, 2], $match);
+        $this->assertEquals($returns, $results);
+    }
+
     public function testModelsCanBeSavedUsingStaticCreateMethod()
     {
         $model = Post::create([ 'label' => 'Marcos' ], true);

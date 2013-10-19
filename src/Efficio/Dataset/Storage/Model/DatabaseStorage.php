@@ -73,11 +73,15 @@ trait DatabaseStorage
         $data = [];
         $updates = [];
 
+        if (!count($this->update_tracking) && !$this->id) {
+            $this->update_tracking = static::getFields();
+        }
+
         if (count($this->update_tracking)) {
             $data = $this->toArray();
 
             foreach ($this->update_tracking as $field) {
-                if (isset($data[ $field ])) {
+                if (array_key_exists($field, $data)) {
                     $updates[ $field ] = $data[ $field ];
                 }
             }
