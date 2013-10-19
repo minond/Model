@@ -21,7 +21,7 @@ trait DatabaseStorage
     /**
      * @var Annotation
      */
-    private static $annotation;
+    protected static $annotation;
 
     /**
      * tracks which fields have been updates
