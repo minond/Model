@@ -33,6 +33,14 @@ class ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(['red', 'blue'], $model->colors);
     }
 
+    public function testAddingToAnArrayUsingArrayPushShorthand()
+    {
+        $model = new UserProps;
+        $model->colors[] = 'red';
+        $model->colors[] = 'blue';
+        $this->assertEquals(['red', 'blue'], $model->colors);
+    }
+
     public function testRemovingFromAnArray()
     {
         $model = new UserProps;

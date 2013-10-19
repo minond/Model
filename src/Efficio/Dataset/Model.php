@@ -179,7 +179,7 @@ class Model implements \JsonSerializable
      * @throws Exception
      * @return mixed
      */
-    public function __get($prop)
+    public function & __get($prop)
     {
         $ret = null;
 
@@ -189,7 +189,7 @@ class Model implements \JsonSerializable
             if (method_exists($this, $getter)) {
                 $ret = $this->{ $getter }();
             } else {
-                $ret = $this->{ $prop };
+                $ret = & $this->{ $prop };
             }
         } else {
             throw new \Exception(sprintf(
