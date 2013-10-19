@@ -118,7 +118,7 @@ trait DatabaseStorage
 
     /**
      * @param Callable $db
-     * @return Model[]
+     * @return mixed[]|Collection
      */
     public static function all(Callable $cb = null)
     {
@@ -133,6 +133,7 @@ trait DatabaseStorage
             }
         } else {
             $results = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+            $results = static::getCollection($results);
         }
 
         return $results;
@@ -153,7 +154,7 @@ trait DatabaseStorage
      * find models using a set of criteria
      * @param array $criteria
      * @param Callable $cb
-     * @return mixed[]|Model[]
+     * @return mixed[]|Collection
      */
     public static function findBy(array $criteria, Callable $cb = null)
     {
@@ -168,6 +169,7 @@ trait DatabaseStorage
             }
         } else {
             $results = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+            $results = static::getCollection($results);
         }
 
         return $results;

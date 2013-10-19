@@ -3,6 +3,7 @@
 namespace Efficio\Dataset;
 
 use Efficio\Utilitatis\Word;
+use Efficio\Dataset\Collection\DynamicCollection;
 
 /**
  * basic model with persistence methods
@@ -254,9 +255,10 @@ class Model implements \JsonSerializable
     /**
      * returns all models
      * @codeCoverageIgnore
-     * @return Model[]
+     * @param Callable $db
+     * @return mixed[]|Collection
      */
-    public static function all()
+    public static function all(Callable $cb = null)
     {
         throw new \Exception(sprintf('Cannot call undefined method %s::%s',
             get_called_class(), __FUNCTION__));
@@ -279,7 +281,7 @@ class Model implements \JsonSerializable
      * @codeCoverageIgnore
      * @param array $criteria
      * @param callback $cb
-     * @return mixed[]|Model[]
+     * @return mixed[]|Collection
      */
     public static function findBy(array $criteria, callable $cb = null)
     {
@@ -291,7 +293,7 @@ class Model implements \JsonSerializable
      * find a model using a set of criteria
      * @codeCoverageIgnore
      * @param array $criteria
-     * @return Model[]
+     * @return Model
      */
     public static function findOneBy(array $criteria)
     {
@@ -477,5 +479,22 @@ class Model implements \JsonSerializable
         }
 
         eval("namespace {$ns}; trait {$tname} { use {$storage}; }");
+    }
+
+    /**
+     * TODO: should check for Model specific Collections
+     * @param $items Model[]
+     * @return DynamicCollection
+     */
+    public static function getCollection(array $items = [])
+    {
+        $coll = new DynamicCollection(get_called_class());
+
+        foreach ($items as & $item) {
+            $coll[] = $item;
+            unset($item);
+        }
+
+        return $coll;
     }
 }

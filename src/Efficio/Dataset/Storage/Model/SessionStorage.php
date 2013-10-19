@@ -124,6 +124,10 @@ trait SessionStorage
             unset($ser);
         }
 
+        if (!is_callable($cb)) {
+            $matches = static::getCollection($matches);
+        }
+
         return $matches;
     }
 
