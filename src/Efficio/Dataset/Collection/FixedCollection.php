@@ -6,6 +6,7 @@ use Exception;
 use InvalidArgumentException;
 use SplFixedArray;
 use Efficio\Dataset\Collection;
+use Efficio\Dataset\Model;
 
 /**
  * a collection of Models
@@ -44,6 +45,8 @@ class FixedCollection extends SplFixedArray implements Collection
                 'A model class is required when creating a Collection object');
         } else if (!class_exists($model_class)) {
             throw new Exception("Model class '$model_class' not found");
+        } else if (!(new $model_class instanceof Model)) {
+            throw new InvalidArgumentException("$model_class is not an instance of Efficio\Dataset\Model");
         }
 
         if (!$this->model_class) {
