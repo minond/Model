@@ -19,7 +19,7 @@ trait FileStorage
         $file = self::initStorageDirectory();
 
         if (!$this->id) {
-            $this->id = unique();
+            $this->id = uniqid();
             touch($file . $this->id);
         }
 
@@ -55,8 +55,8 @@ trait FileStorage
         $dir = self::initStorageDirectory();
         $ret = [];
 
-        foreach (scandir(self::initStorageDirectory()) as $file) {
-            if (is_file($file)) {
+        foreach (scandir($dir) as $file) {
+            if (is_file($dir . $file)) {
                 $model = unserialize(file_get_contents($dir . $file));
                 $ret[] = is_callable($cb) ? $cb($model) : $model;
                 unset($model);
@@ -93,8 +93,8 @@ trait FileStorage
         $dir = self::initStorageDirectory();
         $ret = [];
 
-        foreach (scandir(self::initStorageDirectory()) as $file) {
-            if (is_file($file)) {
+        foreach (scandir($dir) as $file) {
+            if (is_file($dir . $file)) {
                 $model = unserialize(file_get_contents($dir . $file));
                 $match = false;
 
@@ -129,8 +129,8 @@ trait FileStorage
         $dir = self::initStorageDirectory();
         $ret = [];
 
-        foreach (scandir(self::initStorageDirectory()) as $file) {
-            if (is_file($file)) {
+        foreach (scandir($dir) as $file) {
+            if (is_file($dir . $file)) {
                 $model = unserialize(file_get_contents($dir . $file));
                 $match = false;
 
@@ -150,10 +150,10 @@ trait FileStorage
     /**
      * @return string
      */
-    protected static function initStorageDirectory()
+    public static function initStorageDirectory()
     {
         $dir = static::$dir . DIRECTORY_SEPARATOR .
-            preg_replace('/\W+/g', '', get_called_class()) .
+            preg_replace('/\W+/', '', get_called_class()) .
             DIRECTORY_SEPARATOR;
 
         if (!is_dir($dir)) {

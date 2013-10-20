@@ -44,9 +44,9 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
     public function testModelsThatHaveBeenDeletedCanNotBeRetrieved()
     {
         $model = $this->model;
-        $id = $this->model->id;
         $this->model->save();
         $this->model->delete();
+        $id = $this->model->id;
         $this->assertNull($model::find($id));
     }
 

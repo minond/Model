@@ -3,6 +3,7 @@
 namespace Efficio\Tests\Dataset;
 
 use Efficio\Dataset\Model;
+use Efficio\Dataset\Storage\Model\FileStorage;
 use Efficio\Dataset\Storage\Model\SessionStorage;
 use Efficio\Dataset\Storage\Model\DatabaseStorage;
 
@@ -42,6 +43,11 @@ class UserFuncs extends Model
 class BasicSessionModel extends BasicModel
 {
     use SessionStorage;
+}
+
+class BasicFileModel extends BasicModel
+{
+    use FileStorage;
 }
 
 class Post extends Model
