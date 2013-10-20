@@ -26,9 +26,9 @@ class SessionStorageTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testNewModelsGetAnId()
+    public function testNewModelsDontGetAnId()
     {
-        $this->assertNotNull($this->model->id);
+        $this->assertNull($this->model->id);
     }
 
     public function testModelsCanBeSaved()
@@ -183,10 +183,10 @@ class SessionStorageTest extends PHPUnit_Framework_TestCase
     {
         $first_name = 'Marcos';
         $last_name = 'Minond';
-        $id = $this->model->id;
         $this->model->first_name = $first_name;
         $this->model->last_name = $last_name;
         $this->model->save();
+        $id = $this->model->id;
 
         $model = BasicSessionModel::findOneBy([
             'first_name' => $first_name,

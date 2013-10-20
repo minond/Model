@@ -16,7 +16,6 @@ trait SessionStorage
     public function __construct()
     {
         static::init();
-        $this->id = uniqid();
     }
 
     /**
@@ -30,6 +29,10 @@ trait SessionStorage
             // @codeCoverageIgnoreStart
             throw new \Exception('Cannot save to session');
             // @codeCoverageIgnoreEnd
+        }
+
+        if (!$this->id) {
+            $this->id = uniqid();
         }
 
         static::$sess[ static::hash($this->id) ] = serialize($this);
