@@ -5,8 +5,6 @@ namespace Efficio\Tests\Dataset;
 use PHPUnit_Framework_TestCase;
 use Efficio\Tests\Dataset\Storage\Model\StorageTest;
 
-require_once './tests/Dataset/Storage/Model/StorageTest.php';
-
 class FileStorageTest extends StorageTest
 {
     public function setUp()

@@ -5,8 +5,6 @@ namespace Efficio\Tests\Dataset;
 use PDO;
 use PHPUnit_Framework_TestCase;
 
-require_once './tests/mocks/models.php';
-
 class DatabaseStorageTest extends PHPUnit_Framework_TestCase
 {
     /**

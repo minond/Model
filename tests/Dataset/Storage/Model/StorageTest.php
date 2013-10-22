@@ -4,9 +4,6 @@ namespace Efficio\Tests\Dataset\Storage\Model;
 
 use PHPUnit_Framework_TestCase;
 
-require_once './tests/mocks/models.php';
-require_once './tests/mocks/collections.php';
-
 abstract class StorageTest extends PHPUnit_Framework_TestCase
 {
     protected $model;
