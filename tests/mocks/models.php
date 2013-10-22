@@ -19,6 +19,7 @@ class UserProps extends Model
     protected $last_name;
     protected $age;
     protected $colors = [];
+    protected $active = true;
 }
 
 class UserFuncs extends Model

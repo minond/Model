@@ -25,6 +25,37 @@ class ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($val, $model->getFirstName());
     }
 
+    public function testGettingBooleanUsingIsGetter()
+    {
+        $model = new UserProps;
+        $model->active = true;
+        $this->assertEquals(true, $model->isActive());
+    }
+
+    public function testGettingBooleanUsingIsGetterReturnsBooleans()
+    {
+        $model = new UserProps;
+        $model->active = 1;
+        $this->assertEquals(true, $model->isActive());
+        $this->assertTrue(is_bool($model->isActive()));
+    }
+
+    public function testGettingBooleanUsingIsGetterReturnsBooleansEvenWhenPassedNonBoolValue()
+    {
+        $model = new UserProps;
+        $model->isActive('1');
+        $this->assertEquals(true, $model->isActive());
+        $this->assertTrue(is_bool($model->isActive()));
+    }
+
+    public function testGettingBooleanUsingIsGetterReturnsFalseInsteadOfNull()
+    {
+        $model = new UserProps;
+        $model->isActive(null);
+        $this->assertEquals(false, $model->isActive());
+        $this->assertTrue(is_bool($model->isActive()));
+    }
+
     public function testAddingToAnArray()
     {
         $model = new UserProps;
@@ -141,6 +172,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('get', Model::parsePropertyActionFromMethod('getRoles'));
         $this->assertEquals('set', Model::parsePropertyActionFromMethod('setRoles'));
         $this->assertEquals('add', Model::parsePropertyActionFromMethod('addRole'));
+        $this->assertEquals('is', Model::parsePropertyActionFromMethod('isActive'));
         $this->assertEquals('remove', Model::parsePropertyActionFromMethod('removeRole'));
         $this->assertEquals('findOneBy', Model::parsePropertyActionFromMethod('findOneByFirstName'));
         $this->assertEquals('findBy', Model::parsePropertyActionFromMethod('findByFirstName'));
@@ -160,6 +192,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(Model::isLikePropertyGetSet('getFirstName'));
         $this->assertTrue(Model::isLikePropertyGetSet('setFirstName'));
         $this->assertTrue(Model::isLikePropertyGetSet('addRole'));
+        $this->assertTrue(Model::isLikePropertyGetSet('isActive'));
         $this->assertTrue(Model::isLikePropertyGetSet('removeRole'));
         $this->assertFalse(Model::isLikePropertyGetSet('_removeRole'));
     }

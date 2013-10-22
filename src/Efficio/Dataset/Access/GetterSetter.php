@@ -14,6 +14,7 @@ trait GetterSetter
      */
     protected static $P_GET = 'get';
     protected static $P_SET = 'set';
+    protected static $P_IS = 'is';
     protected static $P_ADD = 'add';
     protected static $P_REMOVE = 'remove';
 
@@ -49,6 +50,15 @@ trait GetterSetter
 
                     case static::$P_GET:
                         $ret = $this->{ $prop };
+                        $error = false;
+                        break;
+
+                    case static::$P_IS:
+                        if (count($args)) {
+                            list($this->{ $prop }) = $args;
+                        }
+
+                        $ret = !!$this->{ $prop };
                         $error = false;
                         break;
 
@@ -201,6 +211,7 @@ trait GetterSetter
         $prefixes = [
             static::$P_GET,
             static::$P_SET,
+            static::$P_IS,
             static::$P_ADD,
             static::$P_REMOVE,
         ];
@@ -237,6 +248,8 @@ trait GetterSetter
             $type = static::$P_SET;
         } else if (strpos($method, static::$P_GET) === 0) {
             $type = static::$P_GET;
+        } else if (strpos($method, static::$P_IS) === 0) {
+            $type = static::$P_IS;
         } else if (strpos($method, static::$P_ADD) === 0) {
             $type = static::$P_ADD;
         } else if (strpos($method, static::$P_REMOVE) === 0) {
@@ -280,6 +293,7 @@ trait GetterSetter
         $flags = [
             static::$P_GET,
             static::$P_SET,
+            static::$P_IS,
             static::$P_ADD,
             static::$P_REMOVE,
             static::$F_FINDBY,
