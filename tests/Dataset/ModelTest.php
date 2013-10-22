@@ -130,20 +130,20 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     public function testMethodToPropertyParserForArrays()
     {
-        $this->assertEquals('roles', Model::parsePropertyNameFromMethod('addRole', Model::P_ADD));
-        $this->assertEquals('roles', Model::parsePropertyNameFromMethod('removeRole', Model::P_REMOVE));
+        $this->assertEquals('roles', Model::parsePropertyNameFromMethod('addRole', 'add'));
+        $this->assertEquals('roles', Model::parsePropertyNameFromMethod('removeRole', 'remove'));
         $this->assertEquals('roles', Model::parsePropertyNameFromMethod('setRoles'));
         $this->assertEquals('roles', Model::parsePropertyNameFromMethod('getRoles'));
     }
 
     public function testMethodTypeParser()
     {
-        $this->assertEquals(Model::P_GET, Model::parsePropertyActionFromMethod('getRoles'));
-        $this->assertEquals(Model::P_SET, Model::parsePropertyActionFromMethod('setRoles'));
-        $this->assertEquals(Model::P_ADD, Model::parsePropertyActionFromMethod('addRole'));
-        $this->assertEquals(Model::P_REMOVE, Model::parsePropertyActionFromMethod('removeRole'));
-        $this->assertEquals(Model::F_FINDONEBY, Model::parsePropertyActionFromMethod('findOneByFirstName'));
-        $this->assertEquals(Model::F_FINDBY, Model::parsePropertyActionFromMethod('findByFirstName'));
+        $this->assertEquals('get', Model::parsePropertyActionFromMethod('getRoles'));
+        $this->assertEquals('set', Model::parsePropertyActionFromMethod('setRoles'));
+        $this->assertEquals('add', Model::parsePropertyActionFromMethod('addRole'));
+        $this->assertEquals('remove', Model::parsePropertyActionFromMethod('removeRole'));
+        $this->assertEquals('findOneBy', Model::parsePropertyActionFromMethod('findOneByFirstName'));
+        $this->assertEquals('findBy', Model::parsePropertyActionFromMethod('findByFirstName'));
         $this->assertEquals(null, Model::parsePropertyActionFromMethod('invalidCall'));
     }
 
