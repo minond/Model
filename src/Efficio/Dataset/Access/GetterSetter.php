@@ -115,12 +115,14 @@ trait GetterSetter
                 switch ($type) {
                     case static::$F_FINDBY:
                         $error = false;
-                        $matches = static::findBy($filter);
+                        $matches = call_user_func(
+                            ['static', static::$F_FINDBY], $filter);
                         break;
 
                     case static::$F_FINDONEBY:
                         $error = false;
-                        $matches = static::findOneBy($filter);
+                        $matches = call_user_func(
+                            ['static', static::$F_FINDONEBY], $filter);
                         break;
                 }
             }
@@ -196,10 +198,20 @@ trait GetterSetter
     final public static function isLikePropertyGetSet($method)
     {
         $method = strtolower($method);
-        return strpos($method, static::$P_GET) === 0 ||
-            strpos($method, static::$P_SET) === 0 ||
-            strpos($method, static::$P_ADD) === 0 ||
-            strpos($method, static::$P_REMOVE) === 0;
+        $prefixes = [
+            static::$P_GET,
+            static::$P_SET,
+            static::$P_ADD,
+            static::$P_REMOVE,
+        ];
+
+        foreach ($prefixes as $prefix) {
+            if (strpos($method, $prefix) === 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
