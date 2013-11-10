@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use SplFixedArray;
 use Efficio\Dataset\Collection;
 use Efficio\Dataset\Model;
+use Efficio\Dataset\Access\CollectionAccess;
 
 /**
  * a collection of Models

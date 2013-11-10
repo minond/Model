@@ -1,6 +1,6 @@
 <?php
 
-namespace Efficio\Dataset\Collection;
+namespace Efficio\Dataset\Access;
 
 use InvalidArgumentException;
 
