@@ -20,7 +20,7 @@ trait CollectionAccess
         $models = [];
 
         for ($i = 0, $len = count($this); $i < $len; $i++) {
-            $model = parent::offsetGet($i);
+            $model = self::offsetGet($i);
             $models[] = (string) $model;
         }
 
@@ -36,7 +36,7 @@ trait CollectionAccess
         $models = [];
 
         for ($i = 0, $len = count($this); $i < $len; $i++) {
-            $model = parent::offsetGet($i);
+            $model = self::offsetGet($i);
             $models[] = $model->toArray();
         }
 
