@@ -5,7 +5,7 @@ namespace Efficio\Dataset\Storage\Model;
 use PDO;
 use PDOStatement;
 use Efficio\Utilitatis\Word;
-use Efficio\Utilitatis\Annotation;
+use Efficio\Utilitatis\Comment;
 use Efficio\Dataset\Model\Annotations;
 
 /**
@@ -19,9 +19,9 @@ trait DatabaseStorage
     protected static $conn;
 
     /**
-     * @var Annotation
+     * @var Comment
      */
-    protected static $annotation;
+    protected static $comment;
 
     /**
      * tracks which fields have been updates
@@ -34,13 +34,13 @@ trait DatabaseStorage
      */
     public function __set($var, $val)
     {
-        if (!static::$annotation) {
-            static::$annotation = new Annotation(get_class($this));
+        if (!static::$comment) {
+            static::$comment = new Comment(get_class($this));
         }
 
         if (
             $var !== self::DEFAULT_PRIMARY_KEY &&
-            !static::$annotation->doc($var, Annotations::FLAG_PROP_MODIFIER_VIRTUAL)
+            !static::$comment->doc($var, Annotations::FLAG_PROP_MODIFIER_VIRTUAL)
         ) {
             $this->update_tracking[] = $var;
         }
