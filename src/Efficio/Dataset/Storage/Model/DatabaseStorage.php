@@ -39,7 +39,7 @@ trait DatabaseStorage
         }
 
         if (
-            $var !== self::DEFAULT_PRIMARY_KEY &&
+            $var !== static::DEFAULT_PRIMARY_KEY &&
             !static::$comment->doc($var, Annotations::FLAG_PROP_MODIFIER_VIRTUAL)
         ) {
             $this->update_tracking[] = $var;
@@ -87,9 +87,9 @@ trait DatabaseStorage
             }
 
             if (!$this->id)
-                self::generateInsertQuery($updates)->execute();
+                static::generateInsertQuery($updates)->execute();
             else
-                self::generateUpdateQuery($this->id, $updates)->execute();
+                static::generateUpdateQuery($this->id, $updates)->execute();
 
             $this->update_tracking = [];
         }
@@ -106,7 +106,7 @@ trait DatabaseStorage
         $ok = false;
 
         if ($this->id) {
-            $query = self::generateDeleteQuery($this->id);
+            $query = static::generateDeleteQuery($this->id);
             $query->execute();
             $ok = $query->rowCount() >= 1;
         } else {
@@ -123,7 +123,7 @@ trait DatabaseStorage
     public static function all(Callable $cb = null)
     {
         $results = [];
-        $query = self::generateSelectStatement([]);
+        $query = static::generateSelectStatement([]);
         $query->execute();
 
         if ($cb) {
@@ -145,9 +145,9 @@ trait DatabaseStorage
      */
     public static function find($id)
     {
-        $query = self::generateSelectStatement(['id' => $id]);
+        $query = static::generateSelectStatement(['id' => $id]);
         $query->execute();
-        return $query->fetchObject(get_called_class());
+        return $query->fetchObject(get_called_class()) ?: null;
     }
 
     /**
@@ -159,7 +159,7 @@ trait DatabaseStorage
     public static function findBy(array $criteria, Callable $cb = null)
     {
         $results = [];
-        $query = self::generateSelectStatement($criteria);
+        $query = static::generateSelectStatement($criteria);
         $query->execute();
 
         if ($cb) {
@@ -182,9 +182,9 @@ trait DatabaseStorage
      */
     public static function findOneBy(array $criteria)
     {
-        $query = self::generateSelectStatement($criteria);
+        $query = static::generateSelectStatement($criteria);
         $query->execute();
-        return $query->fetchObject(get_called_class());
+        return $query->fetchObject(get_called_class()) ?: null;
     }
 
     /**
@@ -207,7 +207,7 @@ trait DatabaseStorage
         $class = explode('\\', $class);
         $class = array_pop($class);
         $word = new Word;
-        return $word->pluralize($class);
+        return $word->pluralize($word->propertyCase($class));
     }
 
     /**
@@ -219,20 +219,20 @@ trait DatabaseStorage
     protected static function generateSelectStatement(array $filters, array $fields = null)
     {
         $sfilters = [];
-        $fields = $fields ?: self::getFields();
+        $fields = $fields ?: static::getFields();
 
         foreach ($filters as $field => $value) {
             $sfilters[] = sprintf(
                 '%s = %s',
                 $field,
-                self::field($field)
+                static::field($field)
             );
         }
 
         $query = sprintf(
             'select %s from %s',
             implode(', ', $fields),
-            self::getTableName()
+            static::getTableName()
         );
 
         if (count($filters)) {
@@ -245,7 +245,7 @@ trait DatabaseStorage
         $query = static::$conn->prepare($query);
 
         foreach ($filters as $field => & $value) {
-            $query->bindParam(self::field($field), $value);
+            $query->bindParam(static::field($field), $value);
             unset($field);
             unset($value);
         }
@@ -262,13 +262,13 @@ trait DatabaseStorage
     {
         $query = static::$conn->prepare(sprintf(
             'insert into %s(%s) values (%s)',
-            self::getTableName(),
+            static::getTableName(),
             implode(', ', array_keys($fields)),
-            implode(', ', array_map(['self', 'field'], array_keys($fields)))
+            implode(', ', array_map(['static', 'field'], array_keys($fields)))
         ));
 
         foreach ($fields as $field => & $value) {
-            $query->bindParam(self::field($field), $value);
+            $query->bindParam(static::field($field), $value);
             unset($field);
         }
 
@@ -290,20 +290,20 @@ trait DatabaseStorage
             $updates[] = sprintf(
                 '%s = %s',
                 $field,
-                self::field($field)
+                static::field($field)
             );
         }
 
         $query = static::$conn->prepare(sprintf(
             'update %s set %s where `id` = %s',
-            self::getTableName(),
+            static::getTableName(),
             implode(', ', $updates),
             $id
         ));
 
 
         foreach ($fields as $field => & $value) {
-            $query->bindParam(self::field($field), $value);
+            $query->bindParam(static::field($field), $value);
             unset($field);
         }
 
@@ -319,11 +319,11 @@ trait DatabaseStorage
     {
         $query = static::$conn->prepare(sprintf(
             'delete from %s where `id` = %s',
-            self::getTableName(),
-            self::field('id')
+            static::getTableName(),
+            static::field('id')
         ));
 
-        $query->bindParam(self::field('id'), $id);
+        $query->bindParam(static::field('id'), $id);
         return $query;
     }
 }

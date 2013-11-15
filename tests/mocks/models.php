@@ -51,6 +51,11 @@ class BasicFileModel extends BasicModel
     use FileStorage;
 }
 
+class BasicDatabaseModel extends BasicModel
+{
+    use DatabaseStorage;
+}
+
 class Post extends Model
 {
     use DatabaseStorage;

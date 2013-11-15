@@ -16,38 +16,72 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         throw new \Exception('I need a Model');
     }
 
-    public function testModelsDontStartWithAnId()
+    final public function testModelsDontStartWithAnId()
     {
         $this->assertNull($this->model->id);
     }
 
-    public function testModelsCanBeSaved()
+    final public function testModelsCanBeSaved()
     {
         $this->assertNotNull($this->model->save());
     }
 
-    public function testModelsGetAnIdAfterBeignSaved()
+    final public function testModelsGetAnIdAfterBeignSaved()
     {
         $this->model->save();
         $this->assertNotNull($this->model->id);
     }
 
-    public function testModelsCanBeDeleted()
+    final public function testModelsCanBeDeleted()
     {
         $this->model->save();
         $this->assertTrue($this->model->delete());
     }
 
-    public function testModelsThatHaveBeenDeletedCanNotBeRetrieved()
+    final public function testStartOutWithNoId()
+    {
+        $model = $this->model;
+        $model = new $model;
+        $this->assertNull($model->id);
+    }
+
+    final public function testModelsGetAnIdWhenSaved()
+    {
+        $model = $this->model;
+        $model = new $model;
+        $model->save();
+        $this->assertNotNull($model->id);
+    }
+
+    final public function testDeletingModelsThatHaventBeenSavedJustReturnTrue()
+    {
+        $model = $this->model;
+        $model = new $model;
+        $this->assertTrue($model->delete());
+    }
+
+    final public function testIdDoesNotChangeUpdateUpdate()
+    {
+        $model = $this->model;
+        $model = new $model;
+        $model->first_name = uniqid();
+        $model->save();
+        $id = $model->id;
+        $model->first_name = uniqid();
+        $model->save();
+        $this->assertEquals($id, $model->id);
+    }
+
+    final public function testModelsThatHaveBeenDeletedCanNotBeRetrieved()
     {
         $model = $this->model;
         $this->model->save();
-        $this->model->delete();
         $id = $this->model->id;
+        $this->assertTrue($this->model->delete());
         $this->assertNull($model::find($id));
     }
 
-    public function testModelsCanBeFoundById()
+    final public function testModelsCanBeFoundById()
     {
         $model = $this->model;
         $first_name = 'Marcos';
@@ -57,7 +91,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($first_name, $model->first_name);
     }
 
-    public function testAllFunctionReturnsCallbackReturns()
+    final public function testAllFunctionReturnsCallbackReturns()
     {
         $model = $this->model;
 
@@ -76,7 +110,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([$model1->id, $model2->id, $model3->id], $ids);
     }
 
-    public function testAllFunctionReturnsAllModelsWhenNoCallbackIsPassed()
+    final public function testAllFunctionReturnsAllModelsWhenNoCallbackIsPassed()
     {
         $model = $this->model;
 
@@ -94,7 +128,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($model3->id, $models[2]->id);
     }
 
-    public function testFindOneByFunctionWithNoResultsReturnsNull()
+    final public function testFindOneByFunctionWithNoResultsReturnsNull()
     {
         $model = $this->model;
         $first_name = 'Marcos';
@@ -109,7 +143,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertNull($model);
     }
 
-    public function testFindByFunction()
+    final public function testFindByFunction()
     {
         $model = $this->model;
         $model1 = new $model;
@@ -129,7 +163,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($models));
     }
 
-    public function testFindByFunctionTriggersCallBackPerResult()
+    final public function testFindByFunctionTriggersCallBackPerResult()
     {
         $models = 0;
         $model = $this->model;
@@ -153,7 +187,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, $models);
     }
 
-    public function testFindByFunctionTriggersCallBackPerResultAndReturnsAnArrayOrCallbackResponses()
+    final public function testFindByFunctionTriggersCallBackPerResultAndReturnsAnArrayOrCallbackResponses()
     {
         $model = $this->model;
         $model1 = new $model;
@@ -179,7 +213,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([1, 2, 3], $responses);
     }
 
-    public function testFindByFunctionReturnsEmptyArrayOnNoMatches()
+    final public function testFindByFunctionReturnsEmptyArrayOnNoMatches()
     {
         $model = $this->model;
         $model1 = new $model;
@@ -199,7 +233,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($models));
     }
 
-    public function testFindOneByFunction()
+    final public function testFindOneByFunction()
     {
         $model = $this->model;
         $first_name = 'Marcos';
@@ -215,6 +249,46 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals($id, $model->id);
+    }
+
+    final public function testModelsAreNotSavedByDefaultWhenCallingTheUpdateMethod()
+    {
+        $model = $this->model;
+        $model = $model::create([ 'first_name' => 'Marcos' ]);
+        $model->update([ 'first_name' => 'NotMarcos' ]);
+        $this->assertNull($model->id);
+        $this->assertEquals('NotMarcos', $model->first_name);
+    }
+
+    final public function testModelsCanBeSavedWhenCallingTheUpdateMethod()
+    {
+        $model = $this->model;
+        $model = $model::create([ 'first_name' => 'Marcos' ]);
+        $model->update([ 'first_name' => 'NotMarcos' ], true);
+        $this->assertNotNull($model->id);
+        $this->assertEquals('NotMarcos', $model->first_name);
+    }
+
+    final public function testSavingModelsThatHaventBeenUpdated()
+    {
+        $model = $this->model;
+        $model = $model::create([ 'first_name' => 'Marcos' ]);
+        $model->save();
+        $model->save();
+    }
+
+    final public function testModelsCanBeSavedUsingStaticCreateMethod()
+    {
+        $model = $this->model;
+        $model = $model::create([ 'first_name' => 'Marcos' ], true);
+        $this->assertNotNull($model->id);
+    }
+
+    final public function testModelsAreNotSavedByDefaultWhenUsingTheStaticCreateMethod()
+    {
+        $model = $this->model;
+        $model = $model::create([ 'first_name' => 'Marcos' ]);
+        $this->assertNull($model->id);
     }
 }
 
