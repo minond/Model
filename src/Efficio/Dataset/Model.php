@@ -40,6 +40,17 @@ class Model implements JsonSerializable, Handling, Search
     }
 
     /**
+     * because model properties are protected, this allows for calls like:
+     * isset($model->id) => true
+     * @param string $prop
+     * @return boolean
+     */
+    public function __isset($prop)
+    {
+        return property_exists($this, $prop);
+    }
+
+    /**
      * @see Handling::update
      * @param array $updates
      * @param boolean $save

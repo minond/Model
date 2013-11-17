@@ -9,6 +9,18 @@ require_once './tests/mocks/models.php';
 
 class ModelTest extends PHPUnit_Framework_TestCase
 {
+    public function testIssetMethodOnValidProperties()
+    {
+        $model = new UserProps;
+        $this->assertTrue(isset($model->first_name));
+    }
+
+    public function testIssetMethodOnInvalidProperties()
+    {
+        $model = new UserProps;
+        $this->assertFalse(isset($model->_first_name_));
+    }
+
     public function testSettingAndGettingProperties()
     {
         $val = 'Marcos';
