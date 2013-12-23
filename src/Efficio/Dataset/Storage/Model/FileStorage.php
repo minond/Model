@@ -157,7 +157,7 @@ trait FileStorage
             DIRECTORY_SEPARATOR;
 
         if (!is_dir($dir)) {
-            mkdir($dir);
+            mkdir($dir, 0777, true);
         }
 
         return $dir;
