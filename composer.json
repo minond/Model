@@ -1,6 +1,7 @@
 {
     "name": "minond/model",
     "description": "Object models",
+    "license": "GPL-2.0+",
 
     "authors": [
         {

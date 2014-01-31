@@ -127,12 +127,10 @@ trait FileStorage
     public static function findOneBy(array $criteria)
     {
         $dir = self::initStorageDirectory();
-        $ret = [];
 
         foreach (scandir($dir) as $file) {
             if (is_file($dir . $file)) {
                 $model = unserialize(file_get_contents($dir . $file));
-                $match = false;
 
                 foreach ($criteria as $field => $value) {
                     if ($model->{ $field } == $value) {

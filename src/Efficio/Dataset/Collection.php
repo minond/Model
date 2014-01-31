@@ -3,7 +3,6 @@
 namespace Efficio\Dataset;
 
 use ArrayAccess;
-use Serializable;
 use Countable;
 use JsonSerializable;
 
