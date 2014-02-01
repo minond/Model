@@ -1,5 +1,4 @@
 # Model
-=======
 
 [![Build Status](https://travis-ci.org/minond/Model.png?branch=master)](https://travis-ci.org/minond/Model)
 [![Coverage Status](https://coveralls.io/repos/minond/Model/badge.png?branch=master)](https://coveralls.io/r/minond/Model?branch=master)
