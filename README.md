@@ -77,13 +77,26 @@ class User extends Model
 }
 ```
 
-```php
-User::setConnection(new PDO('sqlite::memory:'));
-```
-
 Current storage traits are:
-* Efficio\Dataset\Storage\Model\SessionStorage
-* Efficio\Dataset\Storage\Model\DatabaseStorage
+* `Efficio\Dataset\Storage\Model\DatabaseStorage` - store in a database using PDO.
+* `Efficio\Dataset\Storage\Model\FileStorage` - store in flat files.
+* `Efficio\Dataset\Storage\Model\NullStorage` - no storage.
+* `Efficio\Dataset\Storage\Model\SessionStorage` - stored in the `$_SESSION` array
 
 Since storage information is defined in the model level any sort of custom storage
 may be used.
+
+#### Configuring storage methods
+
+##### DatabaseStorage
+
+```php
+// User uses DatabaseStorage trait
+User::setConnection(new PDO('sqlite::memory:'));
+```
+
+##### FileStorage
+```php
+// User uses FileStorage trait
+User::setDirectory('./cache/models/');
+```
