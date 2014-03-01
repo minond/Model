@@ -240,6 +240,16 @@ class ModelTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    public function testPassingInvalidPropertyToCreateMethodDoesNotTriggerErrorWhenPassiveFlagIsSet()
+    {
+        $model = UserProps::create([
+            'first_name' => 'Marcos',
+            'last_name' => 'Minond',
+            'age' => 24,
+            'invalid' => 24,
+        ], false, true);
+    }
+
     public function testStandardToStringIncludesClassAndModelsId()
     {
         $model = new UserProps;

@@ -94,15 +94,20 @@ class Model implements JsonSerializable, Handling, Search
 
     /**
      * @param array $data
-     * @param boolean $save
+     * @param boolean $save, save model after cration
+     * @param boolean $passive, check data is applicable to model
      * @return Model
      */
-    public static function create(array $data, $save = false)
+    public static function create(array $data, $save = false, $passive = false)
     {
         $class = get_called_class();
         $model = new $class;
 
         foreach ($data as $prop => $val) {
+            if ($passive && !$model->__isset($prop)) {
+                continue;
+            }
+
             $model->__set($prop, $val);
         }
 
