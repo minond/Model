@@ -15,10 +15,6 @@
         "minond/utilitatis": "1.*"
     },
 
-    "require-dev": {
-        "satooshi/php-coveralls": "dev-master"
-    },
-
     "autoload": {
         "psr-0": {
             "Efficio": "src/"

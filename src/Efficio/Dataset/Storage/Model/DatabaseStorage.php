@@ -3,7 +3,6 @@
 namespace Efficio\Dataset\Storage\Model;
 
 use PDO;
-use PDOStatement;
 use Efficio\Utilitatis\Word;
 use Efficio\Utilitatis\Comment;
 use Efficio\Dataset\Model\Annotations;
