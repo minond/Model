@@ -19,4 +19,3 @@ interface Collection extends ArrayAccess, Countable, JsonSerializable
      */
     public function collectionOf();
 }
-

@@ -161,4 +161,3 @@ trait FileStorage
         return $dir;
     }
 }
-

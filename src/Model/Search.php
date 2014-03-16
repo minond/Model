@@ -33,4 +33,3 @@ interface Search
      */
     public static function findOneBy(array $criteria);
 }
-

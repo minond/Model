@@ -79,4 +79,3 @@ trait CollectionAccess
         return $this->model_class;
     }
 }
-

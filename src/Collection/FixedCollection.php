@@ -61,4 +61,3 @@ class FixedCollection extends SplFixedArray implements Collection
         }
     }
 }
-

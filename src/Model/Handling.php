@@ -23,4 +23,3 @@ interface Handling
      */
     public function update(array $updates, $save = false);
 }
-

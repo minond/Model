@@ -174,4 +174,3 @@ class Model implements JsonSerializable, Handling, Search
         eval("namespace {$ns}; trait {$tname} { use {$storage}; }");
     }
 }
-

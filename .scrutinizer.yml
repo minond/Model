@@ -13,7 +13,9 @@ before_commands:
 tools:
   php_analyzer: true
   php_code_coverage: true
-  php_code_sniffer: true
+  php_code_sniffer:
+    config:
+      standard: PSR2
   php_cpd: true
   php_cs_fixer: true
   # php_hhvm: true

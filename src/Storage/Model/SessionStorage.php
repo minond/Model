@@ -191,4 +191,3 @@ trait SessionStorage
         }
     }
 }
-

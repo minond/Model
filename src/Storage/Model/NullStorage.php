@@ -76,4 +76,3 @@ trait NullStorage
             get_called_class(), __FUNCTION__));
     }
 }
-

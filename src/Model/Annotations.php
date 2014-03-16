@@ -45,4 +45,3 @@ abstract class Annotations
      */
     const FLAG_PROP_MODIFIER_VIRTUAL = 'virtual';
 }
-

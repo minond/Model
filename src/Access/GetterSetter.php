@@ -324,4 +324,3 @@ trait GetterSetter
         return $prop;
     }
 }
-
