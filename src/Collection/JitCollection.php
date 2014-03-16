@@ -3,19 +3,15 @@
 namespace Efficio\Dataset\Collection;
 
 use Exception;
-use InvalidArgumentException;
 use ArrayObject;
-use Efficio\Dataset\Collection;
+use InvalidArgumentException;
 use Efficio\Dataset\Model;
-use Efficio\Dataset\Access\CollectionAccess;
 
 /**
  * load a model when requested
  */
-class JitCollection extends ArrayObject implements Collection
+class JitCollection extends ArrayCollection
 {
-    use CollectionAccess;
-
     /**
      * @param string|Model|Model[] $model_class
      * @throws InvalidArgumentException
@@ -119,7 +115,8 @@ class JitCollection extends ArrayObject implements Collection
                 $this->model_class));
         }
 
-        parent::offsetSet($index, $model);
+        // skip parent. go straight to array
+        ArrayObject::offsetSet($index, $model);
     }
 
     /**
@@ -138,4 +135,3 @@ class JitCollection extends ArrayObject implements Collection
         return $to - $from;
     }
 }
-

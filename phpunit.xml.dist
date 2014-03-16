@@ -24,6 +24,7 @@
 
 	<logging>
 		<log type="coverage-html" target="bin/report/" highlight="true" />
+		<log type="coverage-text" target="php://stdout" highlight="true" />
 		<log type="tap" target="bin/list.tap" />
 		<log type="json" target="bin/data.json" />
 	</logging>

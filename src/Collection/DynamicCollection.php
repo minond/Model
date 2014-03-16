@@ -4,18 +4,13 @@ namespace Efficio\Dataset\Collection;
 
 use Exception;
 use InvalidArgumentException;
-use ArrayObject;
-use Efficio\Dataset\Collection;
 use Efficio\Dataset\Model;
-use Efficio\Dataset\Access\CollectionAccess;
 
 /**
  * a collection of Models
  */
-class DynamicCollection extends ArrayObject implements Collection
+class DynamicCollection extends ArrayCollection
 {
-    use CollectionAccess;
-
     /**
      * @param string|Model|Model[] $model_class
      * @throws InvalidArgumentException
@@ -54,4 +49,3 @@ class DynamicCollection extends ArrayObject implements Collection
         }
     }
 }
-
