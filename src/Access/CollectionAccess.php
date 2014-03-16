@@ -59,8 +59,8 @@ trait CollectionAccess
             throw new InvalidArgumentException(sprintf(
                 'Invalid model of class "%s". This is a collection of "%s" models',
                 is_object($model) ? get_class($model) : gettype($model),
-                $this->model_class)
-            );
+                $this->model_class
+            ));
         }
 
         parent::offsetSet($index, $model);
