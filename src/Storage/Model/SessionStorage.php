@@ -64,6 +64,7 @@ trait SessionStorage
     public static function init()
     {
         $key = self::sessionHash();
+        $session = & $_SESSION;
 
         // sessions is always created before tests
         // @codeCoverageIgnoreStart
@@ -72,11 +73,11 @@ trait SessionStorage
         }
         // @codeCoverageIgnoreEnd
 
-        if (!isset($_SESSION[ $key ])) {
-            $_SESSION[ $key ] = [];
+        if (!isset($session[ $key ])) {
+            $session[ $key ] = [];
         }
 
-        static::$sess = & $_SESSION[ $key ];
+        static::$sess = & $session[ $key ];
     }
 
     /**
@@ -190,5 +191,15 @@ trait SessionStorage
             unset($model);
             unset($ser);
         }
+    }
+
+    /**
+     * returns a model's hash
+     * @param mixed $id
+     * @return string
+     */
+    public static function hash($id)
+    {
+        return get_called_class() . '_' . $id;
     }
 }

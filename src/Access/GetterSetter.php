@@ -129,13 +129,17 @@ trait GetterSetter
                     case static::$F_FINDBY:
                         $error = false;
                         $matches = call_user_func(
-                            ['static', static::$F_FINDBY], $filter);
+                            ['static', static::$F_FINDBY],
+                            $filter
+                        );
                         break;
 
                     case static::$F_FINDONEBY:
                         $error = false;
                         $matches = call_user_func(
-                            ['static', static::$F_FINDONEBY], $filter);
+                            ['static', static::$F_FINDONEBY],
+                            $filter
+                        );
                         break;
                 }
             }
@@ -255,17 +259,17 @@ trait GetterSetter
 
         if (strpos($method, static::$P_SET) === 0) {
             $type = static::$P_SET;
-        } else if (strpos($method, static::$P_GET) === 0) {
+        } elseif (strpos($method, static::$P_GET) === 0) {
             $type = static::$P_GET;
-        } else if (strpos($method, static::$P_IS) === 0) {
+        } elseif (strpos($method, static::$P_IS) === 0) {
             $type = static::$P_IS;
-        } else if (strpos($method, static::$P_ADD) === 0) {
+        } elseif (strpos($method, static::$P_ADD) === 0) {
             $type = static::$P_ADD;
-        } else if (strpos($method, static::$P_REMOVE) === 0) {
+        } elseif (strpos($method, static::$P_REMOVE) === 0) {
             $type = static::$P_REMOVE;
-        } else if (strpos($method, static::$F_FINDBY) === 0) {
+        } elseif (strpos($method, static::$F_FINDBY) === 0) {
             $type = static::$F_FINDBY;
-        } else if (strpos($method, static::$F_FINDONEBY) === 0) {
+        } elseif (strpos($method, static::$F_FINDONEBY) === 0) {
             $type = static::$F_FINDONEBY;
         }
 
@@ -309,13 +313,15 @@ trait GetterSetter
             static::$F_FINDONEBY,
         ];
 
-        $prefix = implode('|', array_map(function($flag) {
+        $prefix = implode('|', array_map(function ($flag) {
             return sprintf('^%s', $flag);
         }, $flags));
 
         $prop = strtolower(preg_replace(
             [sprintf('/%s/', $prefix), '/(\w)([A-Z])/'],
-            ['', '$1_$2'], $method));
+            ['', '$1_$2'],
+            $method
+        ));
 
         switch ($type) {
             // addRole => $roles[]
