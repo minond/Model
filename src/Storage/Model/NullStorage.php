@@ -12,8 +12,11 @@ trait NullStorage
      */
     public function save()
     {
-        throw new \Exception(sprintf('Cannot call undefined method %s::%s',
-            get_called_class(), __FUNCTION__));
+        throw new \Exception(sprintf(
+            'Cannot call undefined method %s::%s',
+            get_called_class(),
+            __FUNCTION__
+        ));
     }
 
     /**
@@ -23,20 +26,26 @@ trait NullStorage
      */
     public function delete()
     {
-        throw new \Exception(sprintf('Cannot call undefined method %s::%s',
-            get_called_class(), __FUNCTION__));
+        throw new \Exception(sprintf(
+            'Cannot call undefined method %s::%s',
+            get_called_class(),
+            __FUNCTION__
+        ));
     }
 
     /**
      * @see Search::all
      * @codeCoverageIgnore
-     * @param Callable $db
+     * @param callable $db
      * @return mixed[]|Collection
      */
-    public static function all(Callable $cb = null)
+    public static function all(callable $cb = null)
     {
-        throw new \Exception(sprintf('Cannot call undefined method %s::%s',
-            get_called_class(), __FUNCTION__));
+        throw new \Exception(sprintf(
+            'Cannot call undefined method %s::%s',
+            get_called_class(),
+            __FUNCTION__
+        ));
     }
 
     /**
@@ -47,21 +56,27 @@ trait NullStorage
      */
     public static function find($id)
     {
-        throw new \Exception(sprintf('Cannot call undefined method %s::%s',
-            get_called_class(), __FUNCTION__));
+        throw new \Exception(sprintf(
+            'Cannot call undefined method %s::%s',
+            get_called_class(),
+            __FUNCTION__
+        ));
     }
 
     /**
      * @see Search::findBy
      * @codeCoverageIgnore
      * @param array $criteria
-     * @param callback $cb
+     * @param callable $cb
      * @return mixed[]|Collection
      */
     public static function findBy(array $criteria, callable $cb = null)
     {
-        throw new \Exception(sprintf('Cannot call undefined method %s::%s',
-            get_called_class(), __FUNCTION__));
+        throw new \Exception(sprintf(
+            'Cannot call undefined method %s::%s',
+            get_called_class(),
+            __FUNCTION__
+        ));
     }
 
     /**
@@ -72,7 +87,10 @@ trait NullStorage
      */
     public static function findOneBy(array $criteria)
     {
-        throw new \Exception(sprintf('Cannot call undefined method %s::%s',
-            get_called_class(), __FUNCTION__));
+        throw new \Exception(sprintf(
+            'Cannot call undefined method %s::%s',
+            get_called_class(),
+            __FUNCTION__
+        ));
     }
 }

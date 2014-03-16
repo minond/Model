@@ -65,11 +65,12 @@ trait SessionStorage
     {
         $key = self::sessionHash();
 
-        if (!session_id())
-            // sessions is always created before tests
-            // @codeCoverageIgnoreStart
+        // sessions is always created before tests
+        // @codeCoverageIgnoreStart
+        if (!session_id()) {
             session_start();
-            // @codeCoverageIgnoreEnd
+        }
+        // @codeCoverageIgnoreEnd
 
         if (!isset($_SESSION[ $key ])) {
             $_SESSION[ $key ] = [];

@@ -58,4 +58,3 @@ class DatabaseStorageTest extends StorageTest
         $this->assertEquals($conn2, ImportantPost::getConnection());
     }
 }
-

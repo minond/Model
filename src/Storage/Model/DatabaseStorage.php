@@ -37,10 +37,10 @@ trait DatabaseStorage
             static::$comment = new Comment(get_class($this));
         }
 
-        if (
-            $var !== static::DEFAULT_PRIMARY_KEY &&
-            !static::$comment->doc($var, Annotations::FLAG_PROP_MODIFIER_VIRTUAL)
-        ) {
+        $is_primary_key = $var !== static::DEFAULT_PRIMARY_KEY;
+        $is_virtual = static::$comment->doc($var, Annotations::FLAG_PROP_MODIFIER_VIRTUAL);
+
+        if ($is_primary_key && !$is_virtual) {
             $this->update_tracking[] = $var;
         }
 
@@ -85,10 +85,11 @@ trait DatabaseStorage
                 }
             }
 
-            if (!$this->id)
+            if (!$this->id) {
                 static::generateInsertQuery($updates)->execute();
-            else
+            } else {
                 static::generateUpdateQuery($this->id, $updates)->execute();
+            }
 
             $this->update_tracking = [];
         }
@@ -116,10 +117,10 @@ trait DatabaseStorage
     }
 
     /**
-     * @param Callable $db
+     * @param callable $db
      * @return mixed[]|Collection
      */
-    public static function all(Callable $cb = null)
+    public static function all(callable $cb = null)
     {
         $results = [];
         $query = static::generateSelectStatement([]);
@@ -152,10 +153,10 @@ trait DatabaseStorage
     /**
      * find models using a set of criteria
      * @param array $criteria
-     * @param Callable $cb
+     * @param callable $cb
      * @return mixed[]|Collection
      */
-    public static function findBy(array $criteria, Callable $cb = null)
+    public static function findBy(array $criteria, callable $cb = null)
     {
         $results = [];
         $query = static::generateSelectStatement($criteria);

@@ -133,12 +133,4 @@ class DynamicCollectionTest extends PHPUnit_Framework_TestCase
         $posts[] = \Efficio\Tests\Dataset\Post::create([ 'id' => 1 ]);
         echo json_encode($posts);
     }
-
-    // public function testCollectionsCanBeSerializedAndUnserialized()
-    // {
-    //     $posts = new DynamicCollection('Efficio\Tests\Dataset\Post');
-    //     $posts[] = \Efficio\Tests\Dataset\Post::create([ 'id' => 1 ]);
-    //     echo serialize($posts);
-    // }
 }
-

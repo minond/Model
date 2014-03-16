@@ -29,13 +29,13 @@ class FixedCollection extends SplFixedArray implements Collection
         if (is_int($model_class)) {
             $count = $model_class;
             $model_class = $this->model_class;
-        } else if (!$model_class) {
+        } elseif (!$model_class) {
             $model_class = $this->model_class;
-        } else if (is_array($model_class)) {
+        } elseif (is_array($model_class)) {
             $models = $model_class;
             $count = count($models);
             $model_class = $count ? get_class($models[0]) : false;
-        } else if (is_object($model_class)) {
+        } elseif (is_object($model_class)) {
             $model_class = get_class($model_class);
             $models = func_get_args();
             $count = count($models);
@@ -44,9 +44,9 @@ class FixedCollection extends SplFixedArray implements Collection
         if (!$model_class) {
             throw new InvalidArgumentException(
                 'A model class is required when creating a Collection object');
-        } else if (!class_exists($model_class)) {
+        } elseif (!class_exists($model_class)) {
             throw new Exception("Model class '$model_class' not found");
-        } else if (!(new $model_class instanceof Model)) {
+        } elseif (!(new $model_class instanceof Model)) {
             throw new InvalidArgumentException("$model_class is not an instance of Efficio\Dataset\Model");
         }
 

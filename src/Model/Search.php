@@ -6,10 +6,10 @@ interface Search
 {
     /**
      * returns all models or the return value of the callback
-     * @param Callable $db
+     * @param callable $db
      * @return mixed[]|Collection
      */
-    public static function all(Callable $cb = null);
+    public static function all(callable $cb = null);
 
     /**
      * find a model using a unique identifier

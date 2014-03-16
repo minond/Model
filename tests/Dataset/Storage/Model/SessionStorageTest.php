@@ -17,4 +17,3 @@ class SessionStorageTest extends StorageTest
         $this->model = new BasicSessionModel;
     }
 }
-

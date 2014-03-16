@@ -102,7 +102,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $model2->save();
         $model3->save();
 
-        $ids = $model::all(function($model) {
+        $ids = $model::all(function ($model) {
             return $model->id;
         });
 
@@ -180,7 +180,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
 
         $model::findBy([
             'last_name' => 'findbyfunctiontest',
-        ], function($model) use(& $models) {
+        ], function ($model) use(& $models) {
             $models++;
         });
 
@@ -205,7 +205,7 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
 
         $responses = $model::findBy([
             'last_name' => 'findbyfunctiontest',
-        ], function($model) {
+        ], function ($model) {
             return $model->first_name;
         });
 
@@ -291,4 +291,3 @@ abstract class StorageTest extends PHPUnit_Framework_TestCase
         $this->assertNull($model->id);
     }
 }
-

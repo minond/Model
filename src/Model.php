@@ -35,8 +35,11 @@ class Model implements JsonSerializable, Handling, Search
      */
     public function __toString()
     {
-        return str_replace('\\', '.', strtolower(get_called_class())) .
-            ':' . ($this->id ?: spl_object_hash($this));
+        $uniq = $this->id ?: spl_object_hash($this);
+        $name = sprintf('%s:%s', get_called_class(), $uniq);
+        $name = strtolower($name);
+
+        return str_replace('\\', '.', $name);
     }
 
     /**

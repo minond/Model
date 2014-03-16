@@ -35,4 +35,3 @@ class FileStorageTest extends StorageTest
         $this->assertTrue(rmdir($dir));
     }
 }
-

@@ -8,4 +8,3 @@ class FixedUsers extends FixedCollection
 {
     protected $model_class = 'Efficio\Tests\Dataset\Post';
 }
-

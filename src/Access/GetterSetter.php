@@ -2,6 +2,7 @@
 
 namespace Efficio\Dataset\Access;
 
+use Exception;
 use Efficio\Utilitatis\Word;
 
 /**
@@ -94,9 +95,11 @@ trait GetterSetter
         }
 
         if ($error) {
-            throw new \Exception(sprintf(
+            throw new Exception(sprintf(
                 'Invalid method %s called on class %s',
-                $method, get_called_class()));
+                $method,
+                get_called_class()
+            ));
         }
 
         return $ret;
@@ -139,9 +142,11 @@ trait GetterSetter
         }
 
         if ($error) {
-            throw new \Exception(sprintf(
+            throw new Exception(sprintf(
                 'Invalid static method %s called on class %s',
-                $method, get_called_class()));
+                $method,
+                get_called_class()
+            ));
         }
 
         return $matches;
@@ -165,9 +170,11 @@ trait GetterSetter
                 $this->{ $prop } = $val;
             }
         } else {
-            throw new \Exception(sprintf(
+            throw new Exception(sprintf(
                 'Cannot set invalid property %s on class %s',
-                $prop, get_called_class()));
+                $prop,
+                get_called_class()
+            ));
         }
 
         return $val;
@@ -193,9 +200,11 @@ trait GetterSetter
                 $ret = & $this->{ $prop };
             }
         } else {
-            throw new \Exception(sprintf(
+            throw new Exception(sprintf(
                 'Cannot get invalid property %s on class %s',
-                $prop, get_called_class()));
+                $prop,
+                get_called_class()
+            ));
         }
 
         return $ret;

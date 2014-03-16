@@ -123,4 +123,3 @@ class FixedCollectionTest extends PHPUnit_Framework_TestCase
         echo $users;
     }
 }
-

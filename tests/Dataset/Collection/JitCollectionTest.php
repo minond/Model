@@ -259,4 +259,3 @@ class JitCollectionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($post_id, $post->id);
     }
 }
-
