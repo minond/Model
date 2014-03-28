@@ -275,31 +275,6 @@ class ModelTest extends PHPUnit_Framework_TestCase
         ], $deco);
     }
 
-    public function testCreatingStorageTraits()
-    {
-        Model::saveTo('\Efficio\Dataset\Storage\Model\SessionStorage', 'ValidStorage');
-        $this->assertTrue(trait_exists('\Efficio\Dataset\Storage\Model\ValidStorage'));
-    }
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage \Efficio\Dataset\Storage\Model\ErrorStorage has already been defined
-     */
-    public function testRecreatingStorageTraitsWithSameNameTriggersError()
-    {
-        Model::saveTo('\Efficio\Dataset\Storage\Model\SessionStorage', 'ErrorStorage');
-        Model::saveTo('\Efficio\Dataset\Storage\Model\SessionStorage', 'ErrorStorage');
-    }
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Invalid storage trait: \Efficio\Dataset\Storage\Model\InvalidSessionStorage
-     */
-    public function testCreatingStorageTraitsUsingInvalidStorageDriversTriggersErrors()
-    {
-        Model::saveTo('\Efficio\Dataset\Storage\Model\InvalidSessionStorage');
-    }
-
     /**
      * @expectedException Exception
      * @expectedExceptionMessage Invalid static method test called on class Efficio\Tests\Dataset\BasicModel

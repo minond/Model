@@ -155,25 +155,4 @@ class Model implements JsonSerializable, Handling, Search
 
         return $coll;
     }
-
-    /**
-     * declares the base Storage trait
-     * @param string $storage
-     * @throws \Exception
-     */
-    final public static function saveTo($storage, $tname = 'Storage')
-    {
-        $ns = __NAMESPACE__ . '\Storage\Model';
-        $ss = '\\';
-
-        if (trait_exists("{$ss}{$ns}{$ss}{$tname}")) {
-            throw new \Exception("{$ss}{$ns}{$ss}{$tname} has already been defined");
-        }
-
-        if (!trait_exists($storage)) {
-            throw new \Exception("Invalid storage trait: {$storage}");
-        }
-
-        eval("namespace {$ns}; trait {$tname} { use {$storage}; }");
-    }
 }
